@@ -1,0 +1,2577 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a1020">
+<title>إسألني وبجاوبك 🎯</title>
+
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Rakkas&family=Reem+Kufi:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --gold: #e8b86b;
+  --gold-light: #f4d28a;
+  --gold-dark: #b8893f;
+  --teal: #2dd4bf;
+  --teal-light: #5eead4;
+  --teal-dark: #14b8a6;
+  --bg: #0a1020;
+  --bg-mid: #131b35;
+  --bg-light: #1c2548;
+  --bg-card: rgba(255,255,255,0.04);
+  --bg-card-hover: rgba(255,255,255,0.07);
+  --border: rgba(232,184,107,0.2);
+  --border-strong: rgba(232,184,107,0.4);
+  --text: #f4e9d4;
+  --text-dim: #b8a987;
+  --text-mute: #7a6f5c;
+  --danger: #ef4444;
+  --success: #22c55e;
+  --warn: #f59e0b;
+  --purple: #a855f7;
+  --pts-easy: #22c55e;
+  --pts-mid: #f59e0b;
+  --pts-hard: #ef4444;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { background: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(232,184,107,0.08) 0%, transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(45,212,191,0.05) 0%, transparent 40%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-mid) 100%);
+  z-index: -2;
+  pointer-events: none;
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><g fill='none' stroke='%23e8b86b' stroke-opacity='0.04' stroke-width='1'><path d='M40 0 L80 40 L40 80 L0 40 Z'/><circle cx='40' cy='40' r='15'/></g></svg>");
+  opacity: 0.5;
+  z-index: -1;
+  pointer-events: none;
+}
+
+#root { min-height: 100vh; }
+
+.app {
+  max-width: 460px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+}
+
+/* وضع الشاشة الكاملة */
+.app.fullscreen-mode { max-width: 100%; width: 100%; }
+.app.fullscreen-mode .screen { padding: 32px 48px; }
+.app.fullscreen-mode .header-title { font-size: 64px !important; }
+.app.fullscreen-mode .question-text { font-size: 38px !important; line-height: 1.6 !important; padding: 32px !important; }
+.app.fullscreen-mode .answer-btn { font-size: 26px !important; padding: 24px !important; min-height: 80px; }
+.app.fullscreen-mode .timer-circle { width: 160px !important; height: 160px !important; }
+.app.fullscreen-mode .timer-number { font-size: 56px !important; }
+.app.fullscreen-mode .team-card { padding: 24px !important; }
+.app.fullscreen-mode .team-name { font-size: 28px !important; }
+.app.fullscreen-mode .team-score { font-size: 48px !important; }
+.app.fullscreen-mode .cat-card { min-height: 140px; padding: 24px; }
+.app.fullscreen-mode .cat-icon { font-size: 56px !important; }
+.app.fullscreen-mode .cat-name { font-size: 24px !important; }
+.app.fullscreen-mode .pts-btn { font-size: 32px !important; padding: 30px !important; min-height: 120px !important; }
+
+.screen {
+  padding: 20px 16px;
+  min-height: 100vh;
+  position: relative;
+  animation: slideIn .35s ease;
+}
+@keyframes slideIn { from { opacity:0; transform: translateY(8px);} to { opacity:1; transform: translateY(0);} }
+@keyframes fadeIn { from { opacity:0;} to { opacity:1;} }
+
+.btn {
+  font-family: inherit;
+  font-weight: 700;
+  border: 0;
+  cursor: pointer;
+  padding: 14px 20px;
+  border-radius: 14px;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all .2s;
+  user-select: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+  color: var(--bg);
+  box-shadow: 0 4px 20px -4px rgba(232,184,107,0.5);
+}
+.btn-primary:hover:not(:disabled) { transform: translateY(-2px); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-secondary {
+  background: rgba(232,184,107,0.12);
+  color: var(--gold);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { background: rgba(232,184,107,0.2); }
+.btn-teal {
+  background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+  color: var(--bg);
+}
+.btn-danger {
+  background: rgba(239,68,68,0.15);
+  color: var(--danger);
+  border: 1px solid rgba(239,68,68,0.3);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+}
+.btn-sm { padding: 8px 14px; font-size: 14px; border-radius: 10px; }
+.btn-full { width: 100%; }
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+  backdrop-filter: blur(8px);
+}
+
+h1, h2, h3 { font-family: 'Rakkas', serif; font-weight: 400; }
+.header-title {
+  font-family: 'Rakkas', serif;
+  font-size: 38px;
+  color: var(--gold);
+  text-align: center;
+  margin: 16px 0 6px;
+  text-shadow: 0 2px 12px rgba(232,184,107,0.3);
+}
+.header-subtitle {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+input, textarea, select {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 15px;
+  outline: none;
+  transition: all .2s;
+}
+input:focus, textarea:focus, select:focus { border-color: var(--gold); background: var(--bg-card-hover); }
+label { display: block; font-size: 13px; color: var(--text-dim); margin-bottom: 6px; font-weight: 600; }
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.app.fullscreen-mode .categories-grid {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.cat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .25s;
+  position: relative;
+  overflow: hidden;
+}
+.cat-card:hover { background: var(--bg-card-hover); transform: translateY(-2px); border-color: var(--border-strong); }
+.cat-card.selected {
+  background: linear-gradient(135deg, rgba(232,184,107,0.2), rgba(45,212,191,0.1));
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(232,184,107,0.3), 0 0 30px -10px rgba(232,184,107,0.5);
+}
+.cat-icon { font-size: 36px; margin-bottom: 6px; display: block; }
+.cat-name { font-weight: 700; font-size: 14px; color: var(--text); }
+.cat-count { font-size: 11px; color: var(--text-mute); margin-top: 4px; }
+
+.teams-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.team-card {
+  flex: 1;
+  min-width: 110px;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 12px;
+  text-align: center;
+  transition: all .2s;
+}
+.team-card.active {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, rgba(232,184,107,0.15), rgba(232,184,107,0.05));
+  box-shadow: 0 0 24px -8px rgba(232,184,107,0.5);
+}
+.team-avatar { font-size: 28px; margin-bottom: 4px; }
+.team-name { font-weight: 700; font-size: 14px; }
+.team-score { font-family: 'Rakkas', serif; font-size: 28px; color: var(--gold); margin-top: 4px; }
+
+.welcome-hero { text-align: center; padding: 40px 0 20px; }
+.welcome-logo { font-size: 64px; margin-bottom: 12px; filter: drop-shadow(0 4px 12px rgba(232,184,107,0.4)); }
+.action-cards { display: grid; gap: 12px; margin-top: 24px; }
+.action-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.action-card:hover { background: var(--bg-card-hover); transform: translateX(-4px); }
+.action-icon { font-size: 32px; }
+.action-info { flex: 1; text-align: right; }
+.action-title { font-weight: 700; font-size: 16px; margin-bottom: 2px; }
+.action-desc { font-size: 12px; color: var(--text-dim); }
+.action-arrow { color: var(--gold); font-size: 20px; }
+
+.play-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  margin-bottom: 16px;
+}
+.play-cat {
+  background: rgba(232,184,107,0.15);
+  border: 1px solid var(--border);
+  color: var(--gold);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.timer-container { display: flex; justify-content: center; margin: 20px 0; position: relative; }
+.timer-circle { width: 110px; height: 110px; position: relative; }
+.timer-circle svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.timer-bg { fill: none; stroke: var(--bg-card); stroke-width: 8; }
+.timer-fg {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear, stroke 0.3s;
+}
+.timer-fg.warning { stroke: var(--warn); }
+.timer-fg.danger { stroke: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+.timer-number {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Rakkas', serif; font-size: 36px; color: var(--gold);
+}
+
+.question-text {
+  font-family: 'Reem Kufi', sans-serif;
+  font-size: 22px;
+  line-height: 1.5;
+  text-align: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 20px 0;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.answers-grid {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0;
+}
+.answer-btn {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  color: var(--text);
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all .25s;
+  text-align: right;
+  position: relative;
+}
+.answer-btn:hover:not(:disabled) { background: var(--bg-card-hover); border-color: var(--border-strong); }
+.answer-btn.correct { background: rgba(34,197,94,0.2); border-color: var(--success); color: var(--success); }
+.answer-btn.wrong { background: rgba(239,68,68,0.2); border-color: var(--danger); color: var(--danger); opacity: 0.7; }
+.answer-btn.disabled { opacity: 0.3; pointer-events: none; }
+.answer-btn:disabled { cursor: default; }
+
+/* اختيار النقاط */
+.pts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 30px 0;
+}
+.pts-btn {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+  font-family: 'Rakkas', serif;
+}
+.pts-btn:hover { transform: translateY(-4px); }
+.pts-btn.easy { border-color: var(--pts-easy); }
+.pts-btn.mid { border-color: var(--pts-mid); }
+.pts-btn.hard { border-color: var(--pts-hard); }
+.pts-btn.easy:hover { background: rgba(34,197,94,0.1); box-shadow: 0 8px 20px -8px var(--pts-easy); }
+.pts-btn.mid:hover { background: rgba(245,158,11,0.1); box-shadow: 0 8px 20px -8px var(--pts-mid); }
+.pts-btn.hard:hover { background: rgba(239,68,68,0.1); box-shadow: 0 8px 20px -8px var(--pts-hard); }
+.pts-value {
+  font-size: 36px;
+  font-weight: 400;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 4px;
+}
+.pts-btn.easy .pts-value { color: var(--pts-easy); }
+.pts-btn.mid .pts-value { color: var(--pts-mid); }
+.pts-btn.hard .pts-value { color: var(--pts-hard); }
+.pts-label {
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+/* اختيار النوع/الفقرة */
+.modes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 20px 0;
+}
+.mode-card {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+}
+.mode-card:hover { transform: translateY(-2px); border-color: var(--gold); }
+.mode-icon { font-size: 40px; margin-bottom: 8px; }
+.mode-name { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+.mode-desc { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
+
+/* فقرة التمثيل */
+.charades-card {
+  background: linear-gradient(135deg, var(--purple), #6d28d9);
+  border-radius: 24px;
+  padding: 40px 20px;
+  text-align: center;
+  margin: 20px 0;
+}
+.charades-word {
+  font-family: 'Rakkas', serif;
+  font-size: 56px;
+  color: white;
+  margin: 20px 0;
+}
+.charades-cat {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  color: white;
+}
+
+/* فقرة من أنا */
+.hint-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-right: 4px solid var(--teal);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+/* الـ Modal */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(10,16,32,0.9);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+  animation: fadeIn .25s ease;
+}
+.modal-content {
+  background: var(--bg-mid);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px;
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideIn .3s ease;
+}
+.modal-title {
+  font-family: 'Rakkas', serif;
+  font-size: 24px;
+  color: var(--gold);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-light);
+  border: 1px solid var(--gold);
+  border-radius: 14px;
+  padding: 12px 20px;
+  font-weight: 600;
+  z-index: 1000;
+  animation: toastIn .3s ease;
+}
+@keyframes toastIn { from { opacity:0; transform: translate(-50%, 20px);} to { opacity:1; transform: translate(-50%, 0);} }
+
+.fullscreen-btn {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(232,184,107,0.2);
+  border: 1px solid var(--border);
+  color: var(--gold);
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+}
+
+.warning-banner {
+  background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.05));
+  border: 1px solid rgba(245,158,11,0.4);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 13px;
+  color: var(--warn);
+  margin-bottom: 16px;
+  display: flex;
+  gap: 10px;
+}
+
+.confetti {
+  position: fixed;
+  width: 12px; height: 12px;
+  pointer-events: none;
+  z-index: 999;
+  animation: confetti-fall 3s linear forwards;
+}
+@keyframes confetti-fall {
+  0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.badge-easy { background: rgba(34,197,94,0.2); color: var(--pts-easy); }
+.badge-mid { background: rgba(245,158,11,0.2); color: var(--pts-mid); }
+.badge-hard { background: rgba(239,68,68,0.2); color: var(--pts-hard); }
+
+/* صورة كبيرة */
+.big-image {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 40px;
+  text-align: center;
+  font-size: 120px;
+  margin: 16px 0;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.big-image img {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 8px;
+}
+
+/* admin */
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+.admin-tab {
+  padding: 10px 16px;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--text-dim);
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 14px;
+}
+.admin-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+.question-row {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+.question-row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.question-row-text { font-size: 14px; font-weight: 600; line-height: 1.5; margin-bottom: 6px; }
+.question-row-answer { font-size: 13px; color: var(--success); margin-bottom: 4px; }
+
+@media (min-width: 1200px) {
+  .app.fullscreen-mode { padding: 40px 60px; }
+  .app.fullscreen-mode .question-text { font-size: 48px !important; min-height: 200px; }
+  .app.fullscreen-mode .answer-btn { font-size: 32px !important; padding: 32px !important; }
+  .app.fullscreen-mode .answers-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script src="questions/part1.js"></script>
+<script src="questions/part2.js"></script>
+<script src="questions/part3.js"></script>
+<script src="questions/part4.js"></script>
+<script src="modes/interactive.js"></script>
+
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useRef, useMemo, useCallback } = React;
+
+// ============================================================
+// تجميع البيانات
+// ============================================================
+function buildQuestionsDB() {
+  const merged = {};
+  [window.QUESTIONS_PART1, window.QUESTIONS_PART2, window.QUESTIONS_PART3, window.QUESTIONS_PART4]
+    .filter(Boolean).forEach(p => {
+      Object.keys(p).forEach(cat => {
+        if (!merged[cat]) merged[cat] = [];
+        merged[cat] = merged[cat].concat(p[cat]);
+      });
+    });
+
+  // الأسئلة المضافة والصور من المستخدم
+  try {
+    const custom = JSON.parse(localStorage.getItem('esalni_v3_custom') || '{}');
+    Object.keys(custom).forEach(cat => {
+      if (!merged[cat]) merged[cat] = [];
+      merged[cat] = merged[cat].concat(custom[cat]);
+    });
+
+    // تطبيق الصور المخصصة من المستخدم
+    const customImages = JSON.parse(localStorage.getItem('esalni_v3_images') || '{}');
+    Object.keys(merged).forEach(cat => {
+      merged[cat].forEach((q, idx) => {
+        const key = `${cat}_${idx}`;
+        if (customImages[key]) {
+          q.customImg = customImages[key];
+        }
+      });
+    });
+  } catch(e) {}
+
+  return merged;
+}
+
+function buildModesDB() {
+  const modes = window.INTERACTIVE_MODES || {};
+
+  // تطبيق الصور المخصصة على الفقرة المرئية
+  try {
+    const customImages = JSON.parse(localStorage.getItem('esalni_v3_mode_images') || '{}');
+    if (modes.images) {
+      modes.images.forEach((item, idx) => {
+        if (customImages[`images_${idx}`]) {
+          item.customImg = customImages[`images_${idx}`];
+        }
+      });
+    }
+  } catch(e) {}
+
+  return modes;
+}
+
+// ============================================================
+// الفئات الجديدة (بدون إسلاميات)
+// ============================================================
+const CATEGORIES = [
+  { id: 'cities', name: 'مدن وعواصم', icon: '🌆' },
+  { id: 'flags', name: 'أعلام الدول', icon: '🚩' },
+  { id: 'geo', name: 'جغرافيا وقارات', icon: '🌍' },
+  { id: 'history', name: 'التاريخ', icon: '📜' },
+  { id: 'sport', name: 'الرياضة', icon: '⚽' },
+  { id: 'cinema', name: 'سينما وتلفزيون', icon: '🎬' },
+  { id: 'music', name: 'الموسيقى', icon: '🎵' },
+  { id: 'tech', name: 'التكنولوجيا', icon: '💻' },
+  { id: 'science', name: 'العلوم', icon: '🔬' },
+  { id: 'food', name: 'الطبخ والأكل', icon: '🍽️' },
+  { id: 'literature', name: 'الأدب', icon: '📚' },
+  { id: 'animals', name: 'الحيوانات', icon: '🦁' },
+  { id: 'celebs', name: 'المشاهير', icon: '⭐' },
+  { id: 'arabia', name: 'السعودية', icon: '🇸🇦' },
+  { id: 'mystery', name: 'ألغاز', icon: '🧩' },
+  { id: 'general', name: 'ثقافة عامة', icon: '💡' },
+];
+
+// الفقرات التفاعلية
+const INTERACTIVE = [
+  { id: 'normal', name: 'سؤال عادي', icon: '❓', desc: 'اختر نقاطك وأجب' },
+  { id: 'charades', name: 'تمثيل', icon: '🎭', desc: 'مثّل والفريق يخمن', pts: 300 },
+  { id: 'images', name: 'صورة', icon: '🖼️', desc: 'خمّن من الصورة', pts: 200 },
+  { id: 'whoami', name: 'من أنا؟', icon: '🗣️', desc: '3 تلميحات', pts: 400 },
+  { id: 'quickfire', name: 'سباق المعلومات', icon: '⏱️', desc: 'أكبر عدد في 60 ثانية', pts: 50 },
+  { id: 'guessfilm', name: 'خمّن الفيلم', icon: '🎬', desc: 'فيلم أو مسلسل', pts: 200 },
+  { id: 'risk', name: 'الرهان', icon: '🎲', desc: 'مضاعفة أو خصم!', pts: 0 },
+];
+
+const AVATARS = ['🦁','🐯','🦊','🐻','🐼','🐨','🐸','🦅','🦉','🐺','🐲','🦄','🐢','🐬','🦜','🐝'];
+const COLORS = ['#e8b86b','#2dd4bf','#ef4444','#8b5cf6','#22c55e','#f59e0b','#06b6d4','#ec4899'];
+
+const playSound = (type) => {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    if (type === 'correct') {
+      osc.frequency.setValueAtTime(523, ctx.currentTime);
+      osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+      osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+    } else if (type === 'wrong') {
+      osc.frequency.setValueAtTime(200, ctx.currentTime);
+      osc.frequency.setValueAtTime(150, ctx.currentTime + 0.15);
+    } else if (type === 'tick') {
+      osc.frequency.setValueAtTime(800, ctx.currentTime);
+    } else if (type === 'click') {
+      osc.frequency.setValueAtTime(600, ctx.currentTime);
+    }
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (type === 'tick' ? 0.05 : 0.3));
+    osc.start();
+    osc.stop(ctx.currentTime + (type === 'tick' ? 0.06 : 0.4));
+  } catch(e) {}
+};
+
+const showConfetti = () => {
+  const colors = ['#e8b86b','#2dd4bf','#ef4444','#8b5cf6','#22c55e'];
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti';
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    el.style.animationDelay = Math.random() * 0.5 + 's';
+    el.style.animationDuration = (2 + Math.random() * 2) + 's';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 4000);
+  }
+};
+
+const shuffle = (arr) => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
+// ============================================================
+// التطبيق الرئيسي
+// ============================================================
+function App() {
+  const [screen, setScreen] = useState('home');
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [questionsDB, setQuestionsDB] = useState(() => buildQuestionsDB());
+  const [modesDB, setModesDB] = useState(() => buildModesDB());
+  const [toast, setToast] = useState(null);
+
+  const [gameSetup, setGameSetup] = useState({
+    teams: [
+      { name: 'الفريق الأول', avatar: '🦁', color: '#e8b86b', score: 0 },
+      { name: 'الفريق الثاني', avatar: '🐯', color: '#2dd4bf', score: 0 },
+    ],
+    categories: [],
+    rounds: 12, // عدد الجولات الكلي
+    timePerQuestion: 45,
+  });
+
+  const [game, setGame] = useState(null);
+
+  const showToast = useCallback((msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 2500);
+  }, []);
+
+  const toggleFullscreen = useCallback(() => {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      const el = document.documentElement;
+      const req = el.requestFullscreen || el.webkitRequestFullscreen;
+      if (req) req.call(el).catch(() => showToast('متصفحك لا يدعم وضع الشاشة الكاملة'));
+    } else {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exit) exit.call(document);
+    }
+  }, [showToast]);
+
+  useEffect(() => {
+    const handler = () => setIsFullscreen(!!(document.fullscreenElement || document.webkitFullscreenElement));
+    document.addEventListener('fullscreenchange', handler);
+    document.addEventListener('webkitfullscreenchange', handler);
+    return () => {
+      document.removeEventListener('fullscreenchange', handler);
+      document.removeEventListener('webkitfullscreenchange', handler);
+    };
+  }, []);
+
+  const catCounts = useMemo(() => {
+    const counts = {};
+    Object.keys(questionsDB).forEach(cat => { counts[cat] = questionsDB[cat].length; });
+    return counts;
+  }, [questionsDB]);
+
+  const totalQuestions = useMemo(() => {
+    return Object.values(catCounts).reduce((sum, n) => sum + n, 0);
+  }, [catCounts]);
+
+  const startGame = useCallback(() => {
+    if (gameSetup.categories.length < 1) {
+      showToast('اختر فئة واحدة على الأقل');
+      return;
+    }
+
+    setGame({
+      currentRound: 0,
+      totalRounds: gameSetup.rounds,
+      currentTeam: 0,
+      teams: gameSetup.teams.map(t => ({ ...t, score: 0 })),
+      categories: gameSetup.categories,
+      timePerQuestion: gameSetup.timePerQuestion,
+      history: [],
+      stage: 'select-mode', // المراحل: select-mode → select-pts → playing → result
+    });
+    setScreen('play');
+  }, [gameSetup, showToast]);
+
+  const screens = {
+    home: <HomeScreen
+      onPlay={() => setScreen('setup')}
+      onAdmin={() => setScreen('admin')}
+      onAbout={() => setScreen('about')}
+      totalQuestions={totalQuestions}
+      categoriesCount={Object.keys(catCounts).length}
+    />,
+    setup: <SetupScreen
+      setup={gameSetup}
+      setSetup={setGameSetup}
+      catCounts={catCounts}
+      onStart={startGame}
+      onBack={() => setScreen('home')}
+      showToast={showToast}
+    />,
+    play: game ? <PlayScreen
+      game={game}
+      setGame={setGame}
+      questionsDB={questionsDB}
+      modesDB={modesDB}
+      onEnd={() => setScreen('summary')}
+      showToast={showToast}
+    /> : null,
+    summary: game ? <SummaryScreen
+      game={game}
+      onHome={() => { setGame(null); setScreen('home'); }}
+      onPlayAgain={() => { setGame(null); setScreen('setup'); }}
+    /> : null,
+    admin: <AdminScreen
+      questionsDB={questionsDB}
+      setQuestionsDB={setQuestionsDB}
+      modesDB={modesDB}
+      setModesDB={setModesDB}
+      onBack={() => setScreen('home')}
+      showToast={showToast}
+    />,
+    about: <AboutScreen onBack={() => setScreen('home')} totalQuestions={totalQuestions} />,
+  };
+
+  return (
+    <div className={`app ${isFullscreen ? 'fullscreen-mode' : ''}`}>
+      <button className="fullscreen-btn" onClick={toggleFullscreen} title="ملء الشاشة">
+        {isFullscreen ? '⊠' : '⛶'}
+      </button>
+      {screens[screen]}
+      {toast && <div className="toast">{toast}</div>}
+    </div>
+  );
+}
+
+// ============================================================
+// الشاشة الرئيسية
+// ============================================================
+function HomeScreen({ onPlay, onAdmin, onAbout, totalQuestions, categoriesCount }) {
+  return (
+    <div className="screen">
+      <div className="welcome-hero">
+        <div className="welcome-logo">🎯</div>
+        <h1 className="header-title">إسألني وبجاوبك</h1>
+        <p className="header-subtitle">لعبة الجلسات والدواوين • نظام 100/200/400</p>
+      </div>
+
+      <div className="card" style={{textAlign: 'center', marginBottom: 20}}>
+        <div style={{display: 'flex', justifyContent: 'space-around', gap: 12}}>
+          <div>
+            <div style={{fontFamily: 'Rakkas, serif', fontSize: 28, color: 'var(--gold)'}}>{totalQuestions.toLocaleString('ar-EG')}</div>
+            <div style={{fontSize: 12, color: 'var(--text-dim)'}}>سؤال</div>
+          </div>
+          <div style={{width: 1, background: 'var(--border)'}}/>
+          <div>
+            <div style={{fontFamily: 'Rakkas, serif', fontSize: 28, color: 'var(--teal)'}}>{categoriesCount}</div>
+            <div style={{fontSize: 12, color: 'var(--text-dim)'}}>فئة</div>
+          </div>
+          <div style={{width: 1, background: 'var(--border)'}}/>
+          <div>
+            <div style={{fontFamily: 'Rakkas, serif', fontSize: 28, color: 'var(--gold)'}}>6</div>
+            <div style={{fontSize: 12, color: 'var(--text-dim)'}}>فقرات تفاعلية</div>
+          </div>
+        </div>
+      </div>
+
+      <div className="action-cards">
+        <div className="action-card" onClick={() => { playSound('click'); onPlay(); }}>
+          <div className="action-icon">🎮</div>
+          <div className="action-info">
+            <div className="action-title">ابدأ اللعب</div>
+            <div className="action-desc">فقرات تفاعلية + أسئلة بنقاط متدرجة</div>
+          </div>
+          <div className="action-arrow">‹</div>
+        </div>
+
+        <div className="action-card" onClick={() => { playSound('click'); onAdmin(); }}>
+          <div className="action-icon">⚙️</div>
+          <div className="action-info">
+            <div className="action-title">إدارة الأسئلة والصور</div>
+            <div className="action-desc">أضف صورك واستيراد وتصدير</div>
+          </div>
+          <div className="action-arrow">‹</div>
+        </div>
+
+        <div className="action-card" onClick={() => { playSound('click'); onAbout(); }}>
+          <div className="action-icon">ℹ️</div>
+          <div className="action-info">
+            <div className="action-title">دليل اللعب</div>
+            <div className="action-desc">القواعد والميزات</div>
+          </div>
+          <div className="action-arrow">‹</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// شاشة الإعداد
+// ============================================================
+function SetupScreen({ setup, setSetup, catCounts, onStart, onBack, showToast }) {
+  const toggleCategory = (catId) => {
+    playSound('click');
+    setSetup(s => ({
+      ...s,
+      categories: s.categories.includes(catId)
+        ? s.categories.filter(c => c !== catId)
+        : [...s.categories, catId]
+    }));
+  };
+
+  const updateTeam = (idx, field, value) => {
+    setSetup(s => ({ ...s, teams: s.teams.map((t, i) => i === idx ? { ...t, [field]: value } : t) }));
+  };
+
+  const addTeam = () => {
+    if (setup.teams.length >= 6) return showToast('الحد الأقصى 6 فرق');
+    setSetup(s => ({
+      ...s,
+      teams: [...s.teams, {
+        name: `الفريق ${s.teams.length + 1}`,
+        avatar: AVATARS[s.teams.length % AVATARS.length],
+        color: COLORS[s.teams.length % COLORS.length],
+        score: 0
+      }]
+    }));
+  };
+
+  const removeTeam = (idx) => {
+    if (setup.teams.length <= 2) return showToast('على الأقل فريقان');
+    setSetup(s => ({ ...s, teams: s.teams.filter((_, i) => i !== idx) }));
+  };
+
+  const selectAllCats = () => {
+    setSetup(s => ({ ...s, categories: CATEGORIES.map(c => c.id) }));
+  };
+
+  return (
+    <div className="screen">
+      <button className="btn btn-ghost btn-sm" onClick={onBack}>‹ رجوع</button>
+      <h2 className="header-title" style={{fontSize: 28, margin: '12px 0'}}>إعداد اللعبة</h2>
+
+      <div style={{marginBottom: 20}}>
+        <label style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+          <span>الفرق ({setup.teams.length})</span>
+          {setup.teams.length < 6 && (
+            <button className="btn btn-sm btn-secondary" onClick={addTeam}>+ إضافة فريق</button>
+          )}
+        </label>
+        {setup.teams.map((team, idx) => (
+          <div key={idx} className="card" style={{marginBottom: 10, padding: 12}}>
+            <div style={{display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8}}>
+              <select value={team.avatar} onChange={(e) => updateTeam(idx, 'avatar', e.target.value)}
+                style={{width: 70, fontSize: 24, textAlign: 'center'}}>
+                {AVATARS.map(a => <option key={a} value={a}>{a}</option>)}
+              </select>
+              <input value={team.name} onChange={(e) => updateTeam(idx, 'name', e.target.value)}
+                placeholder="اسم الفريق" style={{flex: 1}}/>
+              {setup.teams.length > 2 && (
+                <button className="btn btn-danger btn-sm" onClick={() => removeTeam(idx)}>×</button>
+              )}
+            </div>
+            <div style={{display: 'flex', gap: 6, flexWrap: 'wrap'}}>
+              {COLORS.map(c => (
+                <button key={c} onClick={() => updateTeam(idx, 'color', c)}
+                  style={{ width: 28, height: 28, borderRadius: '50%', background: c,
+                    border: team.color === c ? '3px solid white' : '0', cursor: 'pointer' }}/>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{marginBottom: 20}}>
+        <label style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+          <span>الفئات ({setup.categories.length} مختارة)</span>
+          <button className="btn btn-sm btn-secondary" onClick={selectAllCats}>اختيار الكل</button>
+        </label>
+        <div className="categories-grid">
+          {CATEGORIES.map(cat => {
+            const count = catCounts[cat.id] || 0;
+            const isSelected = setup.categories.includes(cat.id);
+            return (
+              <div key={cat.id} className={`cat-card ${isSelected ? 'selected' : ''}`}
+                onClick={() => toggleCategory(cat.id)}>
+                <span className="cat-icon">{cat.icon}</span>
+                <div className="cat-name">{cat.name}</div>
+                <div className="cat-count">{count} سؤال</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div style={{marginBottom: 20}}>
+        <label>عدد الجولات: {setup.rounds}</label>
+        <input type="range" min="6" max="30" step="2" value={setup.rounds}
+          onChange={(e) => setSetup(s => ({ ...s, rounds: parseInt(e.target.value) }))}/>
+        <div style={{fontSize: 11, color: 'var(--text-mute)', marginTop: 4}}>
+          (يتناوب الفرق - {Math.ceil(setup.rounds / setup.teams.length)} جولة لكل فريق تقريباً)
+        </div>
+      </div>
+
+      <div style={{marginBottom: 20}}>
+        <label>الوقت لكل سؤال: {setup.timePerQuestion} ثانية</label>
+        <input type="range" min="20" max="90" step="5" value={setup.timePerQuestion}
+          onChange={(e) => setSetup(s => ({ ...s, timePerQuestion: parseInt(e.target.value) }))}/>
+      </div>
+
+      <button className="btn btn-primary btn-full" onClick={onStart} style={{padding: 18, fontSize: 18}}>
+        🚀 ابدأ اللعبة
+      </button>
+    </div>
+  );
+}
+
+// ============================================================
+// شاشة اللعب الرئيسية - تتفرع حسب المرحلة
+// ============================================================
+function PlayScreen({ game, setGame, questionsDB, modesDB, onEnd, showToast }) {
+  const currentTeam = game.teams[game.currentTeam];
+  const roundsLeft = game.totalRounds - game.currentRound;
+
+  // اللاعب يختار نوع الفقرة
+  if (game.stage === 'select-mode') {
+    return (
+      <ModeSelectionScreen
+        game={game}
+        onSelect={(modeId) => {
+          if (modeId === 'normal') {
+            setGame(g => ({ ...g, stage: 'select-pts', currentMode: 'normal' }));
+          } else {
+            setGame(g => ({ ...g, stage: 'playing', currentMode: modeId }));
+          }
+        }}
+        onEndEarly={onEnd}
+      />
+    );
+  }
+
+  // اللاعب يختار النقاط (للسؤال العادي)
+  if (game.stage === 'select-pts') {
+    return (
+      <PtsSelectionScreen
+        game={game}
+        onSelect={(pts) => {
+          setGame(g => ({ ...g, stage: 'playing', currentPts: pts }));
+        }}
+        onBack={() => setGame(g => ({ ...g, stage: 'select-mode' }))}
+      />
+    );
+  }
+
+  // اللعب الفعلي
+  if (game.stage === 'playing') {
+    const mode = game.currentMode;
+    if (mode === 'normal') return <NormalQuestionPlay game={game} setGame={setGame} questionsDB={questionsDB} onEnd={onEnd} />;
+    if (mode === 'charades') return <CharadesPlay game={game} setGame={setGame} modesDB={modesDB} onEnd={onEnd} />;
+    if (mode === 'whoami') return <WhoAmIPlay game={game} setGame={setGame} modesDB={modesDB} onEnd={onEnd} />;
+    if (mode === 'quickfire') return <QuickfirePlay game={game} setGame={setGame} modesDB={modesDB} onEnd={onEnd} />;
+    if (mode === 'guessfilm') return <GuessfilmPlay game={game} setGame={setGame} modesDB={modesDB} onEnd={onEnd} />;
+    if (mode === 'images') return <ImagesPlay game={game} setGame={setGame} modesDB={modesDB} onEnd={onEnd} />;
+    if (mode === 'risk') return <RiskPlay game={game} setGame={setGame} questionsDB={questionsDB} onEnd={onEnd} />;
+  }
+
+  return null;
+}
+
+// ============================================================
+// شاشة اختيار النوع
+// ============================================================
+function ModeSelectionScreen({ game, onSelect, onEndEarly }) {
+  const currentTeam = game.teams[game.currentTeam];
+  return (
+    <div className="screen">
+      <div className="play-header">
+        <div style={{fontSize: 13, color: 'var(--text-dim)'}}>
+          جولة {game.currentRound + 1}/{game.totalRounds}
+        </div>
+        <button className="btn btn-ghost btn-sm" onClick={onEndEarly}>إنهاء</button>
+      </div>
+
+      <div className="teams-row">
+        {game.teams.map((team, idx) => (
+          <div key={idx} className={`team-card ${idx === game.currentTeam ? 'active' : ''}`}>
+            <div className="team-avatar">{team.avatar}</div>
+            <div className="team-name" style={{color: team.color}}>{team.name}</div>
+            <div className="team-score">{team.score}</div>
+          </div>
+        ))}
+      </div>
+
+      <h3 style={{textAlign: 'center', fontSize: 22, color: 'var(--gold)', margin: '20px 0 10px'}}>
+        دور {currentTeam.avatar} {currentTeam.name}
+      </h3>
+      <p style={{textAlign: 'center', color: 'var(--text-dim)', marginBottom: 20, fontSize: 14}}>
+        اختر نوع التحدي:
+      </p>
+
+      <div className="modes-grid">
+        {INTERACTIVE.map(mode => (
+          <div key={mode.id} className="mode-card" onClick={() => { playSound('click'); onSelect(mode.id); }}>
+            <div className="mode-icon">{mode.icon}</div>
+            <div className="mode-name">{mode.name}</div>
+            <div className="mode-desc">{mode.desc}</div>
+            {mode.pts > 0 && (
+              <div style={{marginTop: 6, fontSize: 11, color: 'var(--gold)', fontWeight: 700}}>
+                +{mode.pts} نقطة
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// شاشة اختيار النقاط
+// ============================================================
+function PtsSelectionScreen({ game, onSelect, onBack }) {
+  const currentTeam = game.teams[game.currentTeam];
+
+  return (
+    <div className="screen">
+      <button className="btn btn-ghost btn-sm" onClick={onBack}>‹ رجوع</button>
+
+      <h3 style={{textAlign: 'center', fontSize: 26, color: 'var(--gold)', margin: '20px 0 8px'}}>
+        {currentTeam.avatar} {currentTeam.name}
+      </h3>
+      <p style={{textAlign: 'center', color: 'var(--text-dim)', marginBottom: 30, fontSize: 14}}>
+        اختر صعوبة السؤال - قبل ما تشوفه:
+      </p>
+
+      <div className="pts-grid">
+        <div className="pts-btn easy" onClick={() => { playSound('click'); onSelect(100); }}>
+          <span className="pts-value">100</span>
+          <div className="pts-label">سهل 📗</div>
+        </div>
+        <div className="pts-btn mid" onClick={() => { playSound('click'); onSelect(200); }}>
+          <span className="pts-value">200</span>
+          <div className="pts-label">متوسط 📙</div>
+        </div>
+        <div className="pts-btn hard" onClick={() => { playSound('click'); onSelect(400); }}>
+          <span className="pts-value">400</span>
+          <div className="pts-label">صعب 📕</div>
+        </div>
+      </div>
+
+      <div className="warning-banner" style={{marginTop: 20}}>
+        <span>💡</span>
+        <div>كلما زادت الصعوبة، كلما زادت النقاط - لكن الخطأ يخسرك دورك!</div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// لعب السؤال العادي
+// ============================================================
+function NormalQuestionPlay({ game, setGame, questionsDB, onEnd }) {
+  const [question, setQuestion] = useState(null);
+  const [answers, setAnswers] = useState([]);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(game.timePerQuestion);
+  const [showHint, setShowHint] = useState(false);
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    // اختر سؤال من فئة عشوائية بالنقاط المختارة
+    const cats = game.categories.filter(c => questionsDB[c]);
+    let pool = [];
+    cats.forEach(catId => {
+      const filtered = questionsDB[catId].filter(q => (q.pts || 200) === game.currentPts);
+      filtered.forEach(q => pool.push({ ...q, categoryId: catId }));
+    });
+
+    if (pool.length === 0) {
+      // fallback - أي سؤال
+      cats.forEach(catId => {
+        questionsDB[catId].forEach(q => pool.push({ ...q, categoryId: catId }));
+      });
+    }
+
+    const q = pool[Math.floor(Math.random() * pool.length)];
+    setQuestion(q);
+    setAnswers(shuffle([q.a, ...q.wrong]));
+    setSelectedAnswer(null);
+    setShowAnswer(false);
+    setShowHint(false);
+    setTimeLeft(game.timePerQuestion);
+
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      setTimeLeft(t => {
+        if (t <= 1) {
+          clearInterval(timerRef.current);
+          handleTimeout();
+          return 0;
+        }
+        if (t <= 6) playSound('tick');
+        return t - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timerRef.current);
+  }, []);
+
+  const handleTimeout = () => {
+    setShowAnswer(true);
+    playSound('wrong');
+    setTimeout(() => goNext(0), 2000);
+  };
+
+  const handleAnswer = (ans) => {
+    if (selectedAnswer || showAnswer) return;
+    clearInterval(timerRef.current);
+    setSelectedAnswer(ans);
+    setShowAnswer(true);
+
+    const isCorrect = ans === question.a;
+    const points = isCorrect ? game.currentPts : 0;
+
+    if (isCorrect) { playSound('correct'); showConfetti(); }
+    else playSound('wrong');
+
+    setTimeout(() => goNext(points), 1800);
+  };
+
+  const goNext = (points) => {
+    setGame(g => {
+      const newTeams = [...g.teams];
+      newTeams[g.currentTeam].score += points;
+      const next = g.currentRound + 1;
+      if (next >= g.totalRounds) {
+        setTimeout(() => onEnd(), 100);
+        return { ...g, teams: newTeams, currentRound: next };
+      }
+      return {
+        ...g,
+        teams: newTeams,
+        currentRound: next,
+        currentTeam: (g.currentTeam + 1) % g.teams.length,
+        stage: 'select-mode',
+        history: [...g.history, { mode: 'normal', q: question, correct: points > 0, points, team: g.currentTeam }]
+      };
+    });
+  };
+
+  if (!question) return null;
+  const category = CATEGORIES.find(c => c.id === question.categoryId);
+  const radius = 45;
+  const circumference = 2 * Math.PI * radius;
+  const progress = (timeLeft / game.timePerQuestion) * circumference;
+  const timerClass = timeLeft <= 5 ? 'danger' : timeLeft <= 15 ? 'warning' : '';
+
+  return (
+    <div className="screen">
+      <div className="play-header">
+        <div>
+          <span className={`badge badge-${game.currentPts === 100 ? 'easy' : game.currentPts === 200 ? 'mid' : 'hard'}`}>
+            {game.currentPts} نقطة
+          </span>
+        </div>
+        <div className="play-cat">{category?.icon} {category?.name}</div>
+      </div>
+
+      <div className="teams-row">
+        {game.teams.map((team, idx) => (
+          <div key={idx} className={`team-card ${idx === game.currentTeam ? 'active' : ''}`}>
+            <div className="team-avatar">{team.avatar}</div>
+            <div className="team-name" style={{color: team.color}}>{team.name}</div>
+            <div className="team-score">{team.score}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="timer-container">
+        <div className="timer-circle">
+          <svg viewBox="0 0 100 100">
+            <circle className="timer-bg" cx="50" cy="50" r={radius}/>
+            <circle className={`timer-fg ${timerClass}`} cx="50" cy="50" r={radius}
+              strokeDasharray={circumference} strokeDashoffset={circumference - progress}/>
+          </svg>
+          <div className="timer-number">{timeLeft}</div>
+        </div>
+      </div>
+
+      <div className="question-text">{question.q}</div>
+
+      {showHint && (
+        <div className="hint-card">💡 {question.hint}</div>
+      )}
+
+      <div className="answers-grid">
+        {answers.map((ans, i) => {
+          const isCorrect = ans === question.a;
+          const isSelected = ans === selectedAnswer;
+          let cls = 'answer-btn';
+          if (showAnswer) {
+            if (isCorrect) cls += ' correct';
+            else if (isSelected) cls += ' wrong';
+            else cls += ' disabled';
+          }
+          return (
+            <button key={i} className={cls} onClick={() => handleAnswer(ans)} disabled={showAnswer}>
+              {showAnswer && isCorrect && '✓ '}
+              {showAnswer && isSelected && !isCorrect && '✗ '}
+              {ans}
+            </button>
+          );
+        })}
+      </div>
+
+      {!showAnswer && !showHint && question.hint && (
+        <button className="btn btn-ghost btn-sm btn-full" onClick={() => setShowHint(true)} style={{marginTop: 8}}>
+          💡 إظهار تلميح (يخسرك نصف النقاط)
+        </button>
+      )}
+    </div>
+  );
+}
+
+// ============================================================
+// لعبة التمثيل
+// ============================================================
+function CharadesPlay({ game, setGame, modesDB, onEnd }) {
+  const [item, setItem] = useState(null);
+  const [showWord, setShowWord] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [phase, setPhase] = useState('ready'); // ready, showing, playing, result
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    const pool = modesDB.charades || [];
+    setItem(pool[Math.floor(Math.random() * pool.length)]);
+  }, []);
+
+  const start = () => {
+    setShowWord(true);
+    setPhase('playing');
+    setTimeLeft(60);
+
+    timerRef.current = setInterval(() => {
+      setTimeLeft(t => {
+        if (t <= 1) {
+          clearInterval(timerRef.current);
+          setPhase('result');
+          return 0;
+        }
+        if (t <= 6) playSound('tick');
+        return t - 1;
+      });
+    }, 1000);
+  };
+
+  const finish = (success) => {
+    clearInterval(timerRef.current);
+    const points = success ? (item?.pts || 300) : 0;
+    if (success) { playSound('correct'); showConfetti(); }
+    else playSound('wrong');
+
+    setGame(g => {
+      const newTeams = [...g.teams];
+      newTeams[g.currentTeam].score += points;
+      const next = g.currentRound + 1;
+      if (next >= g.totalRounds) {
+        setTimeout(() => onEnd(), 100);
+        return { ...g, teams: newTeams, currentRound: next };
+      }
+      return {
+        ...g,
+        teams: newTeams,
+        currentRound: next,
+        currentTeam: (g.currentTeam + 1) % g.teams.length,
+        stage: 'select-mode',
+        history: [...g.history, { mode: 'charades', word: item.word, correct: success, points, team: g.currentTeam }]
+      };
+    });
+  };
+
+  if (!item) return null;
+  const currentTeam = game.teams[game.currentTeam];
+
+  if (phase === 'ready') {
+    return (
+      <div className="screen" style={{textAlign: 'center'}}>
+        <div className="play-header">
+          <div style={{fontSize: 13, color: 'var(--text-dim)'}}>جولة {game.currentRound + 1}/{game.totalRounds}</div>
+          <div className="play-cat">🎭 تمثيل</div>
+        </div>
+
+        <div style={{padding: 40, fontSize: 80}}>🎭</div>
+        <h2 style={{fontSize: 24, color: 'var(--gold)', marginBottom: 16}}>
+          {currentTeam.avatar} {currentTeam.name}
+        </h2>
+        <p style={{color: 'var(--text-dim)', marginBottom: 20, lineHeight: 1.8}}>
+          سيظهر لك كلمة على الشاشة 📱<br/>
+          مثّلها لفريقك بالحركة فقط<br/>
+          <strong style={{color: 'var(--warn)'}}>بدون كلام أو إشارات للحروف</strong><br/>
+          عندك 60 ثانية ⏱️
+        </p>
+
+        <div className="card" style={{marginBottom: 20}}>
+          <div style={{color: 'var(--text-dim)', fontSize: 13}}>الفئة:</div>
+          <div style={{fontSize: 18, color: 'var(--gold)', fontWeight: 700, marginTop: 4}}>
+            {item.cat}
+          </div>
+          <div style={{marginTop: 8, fontFamily: 'Rakkas, serif', fontSize: 24, color: 'var(--gold)'}}>
+            {item.pts} نقطة
+          </div>
+        </div>
+
+        <button className="btn btn-primary btn-full" onClick={start} style={{padding: 18, fontSize: 18}}>
+          🎬 جاهز - اعرض الكلمة
+        </button>
+      </div>
+    );
+  }
+
+  if (phase === 'playing') {
+    return (
+      <div className="screen" style={{textAlign: 'center'}}>
+        <div className="timer-container">
+          <div className="timer-circle">
+            <svg viewBox="0 0 100 100">
+              <circle className="timer-bg" cx="50" cy="50" r="45"/>
+              <circle className={`timer-fg ${timeLeft <= 10 ? 'danger' : ''}`} cx="50" cy="50" r="45"
+                strokeDasharray={2 * Math.PI * 45}
+                strokeDashoffset={2 * Math.PI * 45 - (timeLeft / 60) * 2 * Math.PI * 45}/>
+            </svg>
+            <div className="timer-number">{timeLeft}</div>
+          </div>
+        </div>
+
+        <div className="charades-card">
+          <span className="charades-cat">{item.cat}</span>
+          <div className="charades-word">{item.word}</div>
+          <div style={{color: 'rgba(255,255,255,0.8)', fontSize: 14}}>مثّلها لفريقك!</div>
+        </div>
+
+        <button className="btn btn-primary btn-full" onClick={() => finish(true)} style={{marginBottom: 10, padding: 18}}>
+          ✓ خمّنوها! (+{item.pts})
+        </button>
+        <button className="btn btn-ghost btn-full" onClick={() => finish(false)}>
+          ✗ لم يخمنوا
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="screen" style={{textAlign: 'center', padding: 40}}>
+      <div style={{fontSize: 60, marginBottom: 20}}>⏰</div>
+      <h2 style={{fontSize: 24, marginBottom: 12}}>انتهى الوقت!</h2>
+      <p style={{color: 'var(--text-dim)', marginBottom: 20}}>الكلمة كانت: <strong style={{color: 'var(--gold)'}}>{item.word}</strong></p>
+      <button className="btn btn-primary btn-full" onClick={() => finish(false)}>متابعة</button>
+    </div>
+  );
+}
+
+// ============================================================
+// لعبة من أنا
+// ============================================================
+function WhoAmIPlay({ game, setGame, modesDB, onEnd }) {
+  const [item, setItem] = useState(null);
+  const [hintsRevealed, setHintsRevealed] = useState(1);
+  const [answerInput, setAnswerInput] = useState('');
+  const [showAnswer, setShowAnswer] = useState(false);
+
+  useEffect(() => {
+    const pool = modesDB.whoami || [];
+    setItem(pool[Math.floor(Math.random() * pool.length)]);
+  }, []);
+
+  const finish = (success) => {
+    // النقاط: 400 لتلميح واحد، 200 لاثنين، 100 لثلاثة
+    const ptsMap = { 1: 400, 2: 200, 3: 100 };
+    const points = success ? ptsMap[hintsRevealed] : 0;
+    if (success) { playSound('correct'); showConfetti(); }
+    else playSound('wrong');
+
+    setGame(g => {
+      const newTeams = [...g.teams];
+      newTeams[g.currentTeam].score += points;
+      const next = g.currentRound + 1;
+      if (next >= g.totalRounds) {
+        setTimeout(() => onEnd(), 100);
+        return { ...g, teams: newTeams, currentRound: next };
+      }
+      return {
+        ...g,
+        teams: newTeams,
+        currentRound: next,
+        currentTeam: (g.currentTeam + 1) % g.teams.length,
+        stage: 'select-mode',
+        history: [...g.history, { mode: 'whoami', answer: item.answer, correct: success, points, team: g.currentTeam }]
+      };
+    });
+  };
+
+  if (!item) return null;
+  const currentTeam = game.teams[game.currentTeam];
+  const ptsForCurrentHint = { 1: 400, 2: 200, 3: 100 }[hintsRevealed];
+
+  return (
+    <div className="screen">
+      <div className="play-header">
+        <div style={{fontSize: 13, color: 'var(--text-dim)'}}>جولة {game.currentRound + 1}/{game.totalRounds}</div>
+        <div className="play-cat">🗣️ من أنا؟</div>
+      </div>
+
+      <h3 style={{textAlign: 'center', fontSize: 20, color: 'var(--gold)', marginBottom: 16}}>
+        {currentTeam.avatar} {currentTeam.name}
+      </h3>
+
+      <div className="card" style={{textAlign: 'center', marginBottom: 16, background: 'rgba(45,212,191,0.1)', borderColor: 'var(--teal)'}}>
+        <div style={{fontSize: 13, color: 'var(--text-dim)'}}>إذا خمّنت الآن:</div>
+        <div style={{fontFamily: 'Rakkas, serif', fontSize: 32, color: 'var(--teal)'}}>{ptsForCurrentHint} نقطة</div>
+      </div>
+
+      {item.hints.slice(0, hintsRevealed).map((hint, idx) => (
+        <div key={idx} className="hint-card">
+          <strong style={{color: 'var(--gold)'}}>تلميح {idx + 1}:</strong> {hint}
+        </div>
+      ))}
+
+      {showAnswer && (
+        <div className="card" style={{textAlign: 'center', marginTop: 16, background: 'rgba(34,197,94,0.1)', borderColor: 'var(--success)'}}>
+          <div style={{fontSize: 13, color: 'var(--text-dim)'}}>الإجابة:</div>
+          <div style={{fontFamily: 'Rakkas, serif', fontSize: 28, color: 'var(--success)'}}>{item.answer}</div>
+        </div>
+      )}
+
+      {!showAnswer && hintsRevealed < 3 && (
+        <button className="btn btn-secondary btn-full" onClick={() => setHintsRevealed(h => h + 1)} style={{marginTop: 12}}>
+          + إظهار التلميح التالي (يقل النقاط)
+        </button>
+      )}
+
+      <div style={{display: 'flex', gap: 10, marginTop: 20}}>
+        <button className="btn btn-primary btn-full" onClick={() => finish(true)}>
+          ✓ خمّنوها! (+{ptsForCurrentHint})
+        </button>
+        <button className="btn btn-ghost btn-full" onClick={() => { setShowAnswer(true); setTimeout(() => finish(false), 2500); }}>
+          ✗ استسلام
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// لعبة سباق المعلومات (Quickfire)
+// ============================================================
+function QuickfirePlay({ game, setGame, modesDB, onEnd }) {
+  const [item, setItem] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [phase, setPhase] = useState('ready');
+  const [count, setCount] = useState(0);
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    const pool = modesDB.quickfire || [];
+    setItem(pool[Math.floor(Math.random() * pool.length)]);
+  }, []);
+
+  const start = () => {
+    setPhase('playing');
+    setTimeLeft(60);
+    timerRef.current = setInterval(() => {
+      setTimeLeft(t => {
+        if (t <= 1) {
+          clearInterval(timerRef.current);
+          setPhase('done');
+          return 0;
+        }
+        if (t <= 6) playSound('tick');
+        return t - 1;
+      });
+    }, 1000);
+  };
+
+  const finish = () => {
+    clearInterval(timerRef.current);
+    const points = count * item.pts_per;
+    if (points > 0) { playSound('correct'); if (count >= item.target) showConfetti(); }
+
+    setGame(g => {
+      const newTeams = [...g.teams];
+      newTeams[g.currentTeam].score += points;
+      const next = g.currentRound + 1;
+      if (next >= g.totalRounds) {
+        setTimeout(() => onEnd(), 100);
+        return { ...g, teams: newTeams, currentRound: next };
+      }
+      return {
+        ...g,
+        teams: newTeams,
+        currentRound: next,
+        currentTeam: (g.currentTeam + 1) % g.teams.length,
+        stage: 'select-mode',
+        history: [...g.history, { mode: 'quickfire', count, points, team: g.currentTeam }]
+      };
+    });
+  };
+
+  if (!item) return null;
+  const currentTeam = game.teams[game.currentTeam];
+
+  if (phase === 'ready') {
+    return (
+      <div className="screen" style={{textAlign: 'center'}}>
+        <div className="play-header">
+          <div style={{fontSize: 13, color: 'var(--text-dim)'}}>جولة {game.currentRound + 1}/{game.totalRounds}</div>
+          <div className="play-cat">⏱️ سباق المعلومات</div>
+        </div>
+
+        <div style={{padding: 40, fontSize: 80}}>⏱️</div>
+        <h2 style={{fontSize: 22, color: 'var(--gold)', marginBottom: 16}}>
+          {currentTeam.avatar} {currentTeam.name}
+        </h2>
+
+        <div className="card" style={{marginBottom: 16, padding: 20}}>
+          <div style={{color: 'var(--text-dim)', fontSize: 14, marginBottom: 8}}>التحدي:</div>
+          <div style={{fontSize: 22, fontWeight: 700, color: 'var(--gold)', lineHeight: 1.5}}>
+            {item.challenge}
+          </div>
+          <div style={{marginTop: 12, fontSize: 14, color: 'var(--teal)'}}>
+            💰 {item.pts_per} نقطة لكل إجابة صحيحة
+          </div>
+        </div>
+
+        <p style={{color: 'var(--text-dim)', marginBottom: 20, fontSize: 14}}>
+          عند البدء، اضغط الزر مع كل إجابة صحيحة - 60 ثانية فقط!
+        </p>
+
+        <button className="btn btn-primary btn-full" onClick={start} style={{padding: 18, fontSize: 18}}>
+          🚀 ابدأ السباق
+        </button>
+      </div>
+    );
+  }
+
+  if (phase === 'playing') {
+    return (
+      <div className="screen" style={{textAlign: 'center'}}>
+        <div className="timer-container">
+          <div className="timer-circle">
+            <svg viewBox="0 0 100 100">
+              <circle className="timer-bg" cx="50" cy="50" r="45"/>
+              <circle className={`timer-fg ${timeLeft <= 10 ? 'danger' : ''}`} cx="50" cy="50" r="45"
+                strokeDasharray={2 * Math.PI * 45}
+                strokeDashoffset={2 * Math.PI * 45 - (timeLeft / 60) * 2 * Math.PI * 45}/>
+            </svg>
+            <div className="timer-number">{timeLeft}</div>
+          </div>
+        </div>
+
+        <div className="card" style={{marginBottom: 16, padding: 16}}>
+          <div style={{fontSize: 18, fontWeight: 700, color: 'var(--gold)'}}>{item.challenge}</div>
+        </div>
+
+        <div style={{textAlign: 'center', margin: '20px 0'}}>
+          <div style={{fontFamily: 'Rakkas, serif', fontSize: 80, color: 'var(--gold)'}}>{count}</div>
+          <div style={{color: 'var(--text-dim)', fontSize: 14}}>إجابة صحيحة</div>
+          <div style={{color: 'var(--teal)', fontSize: 14, marginTop: 4}}>
+            = {count * item.pts_per} نقطة
+          </div>
+        </div>
+
+        <button className="btn btn-primary btn-full" onClick={() => { setCount(c => c + 1); playSound('click'); }}
+          style={{padding: 24, fontSize: 22}}>
+          ✓ إجابة صحيحة!
+        </button>
+        <button className="btn btn-ghost btn-full" onClick={finish} style={{marginTop: 8}}>
+          إنهاء مبكر
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="screen" style={{textAlign: 'center', padding: 30}}>
+      <div style={{fontSize: 60, marginBottom: 20}}>⏰</div>
+      <h2 style={{fontSize: 24, marginBottom: 12}}>انتهى الوقت!</h2>
+      <div style={{fontFamily: 'Rakkas, serif', fontSize: 64, color: 'var(--gold)', margin: '20px 0'}}>{count}</div>
+      <p style={{color: 'var(--text-dim)', marginBottom: 8}}>إجابات صحيحة</p>
+      <p style={{color: 'var(--teal)', fontSize: 24, fontWeight: 700, marginBottom: 30}}>
+        +{count * item.pts_per} نقطة
+      </p>
+
+      <div className="card" style={{textAlign: 'right', marginBottom: 20, padding: 14}}>
+        <div style={{fontSize: 12, color: 'var(--text-dim)', marginBottom: 6}}>أمثلة على الإجابات الممكنة:</div>
+        <div style={{fontSize: 13, lineHeight: 1.8}}>{item.sample.slice(0, 10).join('، ')}</div>
+      </div>
+
+      <button className="btn btn-primary btn-full" onClick={finish}>متابعة</button>
+    </div>
+  );
+}
+
+// ============================================================
+// لعبة خمن الفيلم
+// ============================================================
+function GuessfilmPlay({ game, setGame, modesDB, onEnd }) {
+  const [item, setItem] = useState(null);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(45);
+  const [shuffledOptions, setShuffledOptions] = useState([]);
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    const pool = modesDB.guessfilm || [];
+    const q = pool[Math.floor(Math.random() * pool.length)];
+    setItem(q);
+    setShuffledOptions(shuffle(q.options));
+    setTimeLeft(45);
+
+    timerRef.current = setInterval(() => {
+      setTimeLeft(t => {
+        if (t <= 1) {
+          clearInterval(timerRef.current);
+          handleTimeout();
+          return 0;
+        }
+        if (t <= 6) playSound('tick');
+        return t - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timerRef.current);
+  }, []);
+
+  const handleTimeout = () => {
+    setShowAnswer(true);
+    playSound('wrong');
+    setTimeout(() => goNext(0), 2000);
+  };
+
+  const handleAnswer = (ans) => {
+    if (selectedAnswer || showAnswer) return;
+    clearInterval(timerRef.current);
+    setSelectedAnswer(ans);
+    setShowAnswer(true);
+
+    const isCorrect = ans === item.answer;
+    if (isCorrect) { playSound('correct'); showConfetti(); }
+    else playSound('wrong');
+
+    setTimeout(() => goNext(isCorrect ? item.pts : 0), 1800);
+  };
+
+  const goNext = (points) => {
+    setGame(g => {
+      const newTeams = [...g.teams];
+      newTeams[g.currentTeam].score += points;
+      const next = g.currentRound + 1;
+      if (next >= g.totalRounds) {
+        setTimeout(() => onEnd(), 100);
+        return { ...g, teams: newTeams, currentRound: next };
+      }
+      return {
+        ...g,
+        teams: newTeams,
+        currentRound: next,
+        currentTeam: (g.currentTeam + 1) % g.teams.length,
+        stage: 'select-mode',
+        history: [...g.history, { mode: 'guessfilm', correct: points > 0, points, team: g.currentTeam }]
+      };
+    });
+  };
+
+  if (!item) return null;
+  const currentTeam = game.teams[game.currentTeam];
+  const radius = 45;
+  const circumference = 2 * Math.PI * radius;
+  const progress = (timeLeft / 45) * circumference;
+
+  return (
+    <div className="screen">
+      <div className="play-header">
+        <div style={{fontSize: 13, color: 'var(--text-dim)'}}>جولة {game.currentRound + 1}/{game.totalRounds}</div>
+        <div className="play-cat">🎬 خمن الفيلم</div>
+      </div>
+
+      <div className="teams-row">
+        {game.teams.map((team, idx) => (
+          <div key={idx} className={`team-card ${idx === game.currentTeam ? 'active' : ''}`}>
+            <div className="team-avatar">{team.avatar}</div>
+            <div className="team-name" style={{color: team.color}}>{team.name}</div>
+            <div className="team-score">{team.score}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="timer-container">
+        <div className="timer-circle">
+          <svg viewBox="0 0 100 100">
+            <circle className="timer-bg" cx="50" cy="50" r={radius}/>
+            <circle className={`timer-fg ${timeLeft <= 5 ? 'danger' : ''}`} cx="50" cy="50" r={radius}
+              strokeDasharray={circumference} strokeDashoffset={circumference - progress}/>
+          </svg>
+          <div className="timer-number">{timeLeft}</div>
+        </div>
+      </div>
+
+      <div className="question-text">🎬 {item.desc}</div>
+
+      <div className="answers-grid">
+        {shuffledOptions.map((opt, i) => {
+          const isCorrect = opt === item.answer;
+          const isSelected = opt === selectedAnswer;
+          let cls = 'answer-btn';
+          if (showAnswer) {
+            if (isCorrect) cls += ' correct';
+            else if (isSelected) cls += ' wrong';
+            else cls += ' disabled';
+          }
+          return (
+            <button key={i} className={cls} onClick={() => handleAnswer(opt)} disabled={showAnswer}>
+              {showAnswer && isCorrect && '✓ '}
+              {opt}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// لعبة الصور
+// ============================================================
+function ImagesPlay({ game, setGame, modesDB, onEnd }) {
+  const [item, setItem] = useState(null);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(45);
+  const [shuffledOptions, setShuffledOptions] = useState([]);
+  const [showHint, setShowHint] = useState(false);
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    const pool = modesDB.images || [];
+    const q = pool[Math.floor(Math.random() * pool.length)];
+    setItem(q);
+    setShuffledOptions(shuffle(q.options));
+    setTimeLeft(45);
+
+    timerRef.current = setInterval(() => {
+      setTimeLeft(t => {
+        if (t <= 1) {
+          clearInterval(timerRef.current);
+          setShowAnswer(true);
+          playSound('wrong');
+          setTimeout(() => goNext(0), 2000);
+          return 0;
+        }
+        if (t <= 6) playSound('tick');
+        return t - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timerRef.current);
+  }, []);
+
+  const handleAnswer = (ans) => {
+    if (selectedAnswer || showAnswer) return;
+    clearInterval(timerRef.current);
+    setSelectedAnswer(ans);
+    setShowAnswer(true);
+    const isCorrect = ans === item.answer;
+    if (isCorrect) { playSound('correct'); showConfetti(); }
+    else playSound('wrong');
+    setTimeout(() => goNext(isCorrect ? item.pts : 0), 1800);
+  };
+
+  const goNext = (points) => {
+    setGame(g => {
+      const newTeams = [...g.teams];
+      newTeams[g.currentTeam].score += points;
+      const next = g.currentRound + 1;
+      if (next >= g.totalRounds) {
+        setTimeout(() => onEnd(), 100);
+        return { ...g, teams: newTeams, currentRound: next };
+      }
+      return {
+        ...g,
+        teams: newTeams,
+        currentRound: next,
+        currentTeam: (g.currentTeam + 1) % g.teams.length,
+        stage: 'select-mode',
+        history: [...g.history, { mode: 'images', correct: points > 0, points, team: g.currentTeam }]
+      };
+    });
+  };
+
+  if (!item) return null;
+
+  return (
+    <div className="screen">
+      <div className="play-header">
+        <div style={{fontSize: 13, color: 'var(--text-dim)'}}>جولة {game.currentRound + 1}/{game.totalRounds}</div>
+        <div className="play-cat">🖼️ خمن من الصورة</div>
+      </div>
+
+      <div className="teams-row">
+        {game.teams.map((team, idx) => (
+          <div key={idx} className={`team-card ${idx === game.currentTeam ? 'active' : ''}`}>
+            <div className="team-avatar">{team.avatar}</div>
+            <div className="team-name" style={{color: team.color}}>{team.name}</div>
+            <div className="team-score">{team.score}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="timer-container">
+        <div className="timer-circle">
+          <svg viewBox="0 0 100 100">
+            <circle className="timer-bg" cx="50" cy="50" r="45"/>
+            <circle className={`timer-fg ${timeLeft <= 5 ? 'danger' : ''}`} cx="50" cy="50" r="45"
+              strokeDasharray={2 * Math.PI * 45}
+              strokeDashoffset={2 * Math.PI * 45 - (timeLeft / 45) * 2 * Math.PI * 45}/>
+          </svg>
+          <div className="timer-number">{timeLeft}</div>
+        </div>
+      </div>
+
+      <div className="big-image">
+        {item.customImg ? <img src={item.customImg} alt=""/> : item.img}
+      </div>
+
+      {showHint && (
+        <div className="hint-card">💡 {item.desc}</div>
+      )}
+
+      <div className="answers-grid">
+        {shuffledOptions.map((opt, i) => {
+          const isCorrect = opt === item.answer;
+          const isSelected = opt === selectedAnswer;
+          let cls = 'answer-btn';
+          if (showAnswer) {
+            if (isCorrect) cls += ' correct';
+            else if (isSelected) cls += ' wrong';
+            else cls += ' disabled';
+          }
+          return (
+            <button key={i} className={cls} onClick={() => handleAnswer(opt)} disabled={showAnswer}>
+              {showAnswer && isCorrect && '✓ '}
+              {opt}
+            </button>
+          );
+        })}
+      </div>
+
+      {!showAnswer && !showHint && (
+        <button className="btn btn-ghost btn-sm btn-full" onClick={() => setShowHint(true)} style={{marginTop: 8}}>
+          💡 إظهار تلميح
+        </button>
+      )}
+    </div>
+  );
+}
+
+// ============================================================
+// لعبة الرهان
+// ============================================================
+function RiskPlay({ game, setGame, questionsDB, onEnd }) {
+  const [stage, setStage] = useState('bet'); // bet, question, result
+  const [bet, setBet] = useState(0);
+  const [question, setQuestion] = useState(null);
+  const [answers, setAnswers] = useState([]);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(40);
+  const timerRef = useRef(null);
+
+  const currentTeam = game.teams[game.currentTeam];
+  const maxBet = Math.max(100, currentTeam.score);
+
+  const startWithBet = (amount) => {
+    setBet(amount);
+    // سؤال صعب
+    const cats = game.categories.filter(c => questionsDB[c]);
+    let pool = [];
+    cats.forEach(catId => {
+      const filtered = questionsDB[catId].filter(q => (q.pts || 200) >= 200);
+      filtered.forEach(q => pool.push({ ...q, categoryId: catId }));
+    });
+    const q = pool[Math.floor(Math.random() * pool.length)];
+    setQuestion(q);
+    setAnswers(shuffle([q.a, ...q.wrong]));
+    setStage('question');
+    setTimeLeft(40);
+
+    timerRef.current = setInterval(() => {
+      setTimeLeft(t => {
+        if (t <= 1) {
+          clearInterval(timerRef.current);
+          handleAnswer(null);
+          return 0;
+        }
+        if (t <= 6) playSound('tick');
+        return t - 1;
+      });
+    }, 1000);
+  };
+
+  const handleAnswer = (ans) => {
+    if (selectedAnswer || showAnswer) return;
+    clearInterval(timerRef.current);
+    setSelectedAnswer(ans);
+    setShowAnswer(true);
+
+    const isCorrect = ans === question.a;
+    if (isCorrect) { playSound('correct'); showConfetti(); }
+    else playSound('wrong');
+
+    setTimeout(() => {
+      const points = isCorrect ? bet * 2 : -bet;
+      setGame(g => {
+        const newTeams = [...g.teams];
+        newTeams[g.currentTeam].score = Math.max(0, newTeams[g.currentTeam].score + points);
+        const next = g.currentRound + 1;
+        if (next >= g.totalRounds) {
+          setTimeout(() => onEnd(), 100);
+          return { ...g, teams: newTeams, currentRound: next };
+        }
+        return {
+          ...g,
+          teams: newTeams,
+          currentRound: next,
+          currentTeam: (g.currentTeam + 1) % g.teams.length,
+          stage: 'select-mode',
+          history: [...g.history, { mode: 'risk', bet, correct: isCorrect, points, team: g.currentTeam }]
+        };
+      });
+    }, 2000);
+  };
+
+  if (stage === 'bet') {
+    const betOptions = [100, 200, 400];
+    if (currentTeam.score >= 800) betOptions.push(800);
+
+    return (
+      <div className="screen" style={{textAlign: 'center'}}>
+        <div className="play-header">
+          <div style={{fontSize: 13, color: 'var(--text-dim)'}}>جولة {game.currentRound + 1}/{game.totalRounds}</div>
+          <div className="play-cat">🎲 الرهان</div>
+        </div>
+
+        <div style={{padding: 30, fontSize: 80}}>🎲</div>
+        <h2 style={{fontSize: 22, color: 'var(--gold)', marginBottom: 16}}>
+          {currentTeam.avatar} {currentTeam.name}
+        </h2>
+        <p style={{color: 'var(--text-dim)', marginBottom: 24, lineHeight: 1.8}}>
+          راهن بنقاط - وإذا أجبت صح <strong style={{color: 'var(--success)'}}>تربح ضعف الرهان</strong><br/>
+          وإذا خطأت <strong style={{color: 'var(--danger)'}}>تخسر الرهان كله!</strong>
+        </p>
+
+        <div className="card" style={{marginBottom: 20, padding: 16}}>
+          <div style={{color: 'var(--text-dim)', fontSize: 13}}>نقاطك الحالية:</div>
+          <div style={{fontFamily: 'Rakkas, serif', fontSize: 36, color: 'var(--gold)'}}>{currentTeam.score}</div>
+        </div>
+
+        <div style={{fontSize: 14, color: 'var(--text-dim)', marginBottom: 12}}>اختر مقدار الرهان:</div>
+        <div className="pts-grid" style={{gridTemplateColumns: betOptions.length === 4 ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)'}}>
+          {betOptions.map(amount => (
+            <div key={amount} className={`pts-btn ${amount === 100 ? 'easy' : amount === 200 ? 'mid' : 'hard'}`}
+              onClick={() => { playSound('click'); startWithBet(amount); }}>
+              <span className="pts-value">{amount}</span>
+              <div className="pts-label">رهان</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (!question) return null;
+
+  return (
+    <div className="screen">
+      <div className="play-header">
+        <div>
+          <span className="badge badge-hard">🎲 رهان: {bet}</span>
+        </div>
+        <div className="play-cat">صعب</div>
+      </div>
+
+      <div className="card" style={{textAlign: 'center', marginBottom: 16, padding: 12}}>
+        <div style={{fontSize: 13, color: 'var(--text-dim)'}}>إن فزت: +{bet * 2} | إن خسرت: -{bet}</div>
+      </div>
+
+      <div className="timer-container">
+        <div className="timer-circle">
+          <svg viewBox="0 0 100 100">
+            <circle className="timer-bg" cx="50" cy="50" r="45"/>
+            <circle className={`timer-fg ${timeLeft <= 5 ? 'danger' : ''}`} cx="50" cy="50" r="45"
+              strokeDasharray={2 * Math.PI * 45}
+              strokeDashoffset={2 * Math.PI * 45 - (timeLeft / 40) * 2 * Math.PI * 45}/>
+          </svg>
+          <div className="timer-number">{timeLeft}</div>
+        </div>
+      </div>
+
+      <div className="question-text">{question.q}</div>
+
+      <div className="answers-grid">
+        {answers.map((ans, i) => {
+          const isCorrect = ans === question.a;
+          const isSelected = ans === selectedAnswer;
+          let cls = 'answer-btn';
+          if (showAnswer) {
+            if (isCorrect) cls += ' correct';
+            else if (isSelected) cls += ' wrong';
+            else cls += ' disabled';
+          }
+          return (
+            <button key={i} className={cls} onClick={() => handleAnswer(ans)} disabled={showAnswer}>
+              {showAnswer && isCorrect && '✓ '}
+              {showAnswer && isSelected && !isCorrect && '✗ '}
+              {ans}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// شاشة الملخص
+// ============================================================
+function SummaryScreen({ game, onHome, onPlayAgain }) {
+  const sorted = [...game.teams].sort((a, b) => b.score - a.score);
+  const winner = sorted[0];
+  const isTie = sorted.length > 1 && sorted[0].score === sorted[1].score;
+
+  useEffect(() => {
+    if (!isTie) { showConfetti(); setTimeout(showConfetti, 800); }
+  }, []);
+
+  return (
+    <div className="screen">
+      <div style={{textAlign: 'center', padding: '30px 0'}}>
+        <div style={{fontSize: 80, marginBottom: 10}}>{isTie ? '🤝' : '🏆'}</div>
+        <h1 className="header-title">{isTie ? 'تعادل!' : `فاز ${winner.name}`}</h1>
+        {!isTie && <div style={{color: 'var(--gold)', fontSize: 18, fontWeight: 700}}>{winner.avatar} {winner.score} نقطة</div>}
+      </div>
+
+      <div className="card" style={{marginBottom: 20}}>
+        <h3 style={{fontSize: 18, marginBottom: 12, textAlign: 'center'}}>الترتيب النهائي</h3>
+        {sorted.map((team, idx) => (
+          <div key={idx} style={{
+            display: 'flex', alignItems: 'center', padding: 12,
+            background: idx === 0 ? 'rgba(232,184,107,0.1)' : 'transparent',
+            borderRadius: 10, marginBottom: 6
+          }}>
+            <div style={{
+              width: 32, height: 32, borderRadius: '50%',
+              background: idx === 0 ? 'var(--gold)' : idx === 1 ? '#aaa' : '#cd7f32',
+              color: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontWeight: 700, marginLeft: 12
+            }}>{idx + 1}</div>
+            <div style={{fontSize: 26, marginLeft: 12}}>{team.avatar}</div>
+            <div style={{flex: 1, fontWeight: 700}}>{team.name}</div>
+            <div style={{fontFamily: 'Rakkas, serif', fontSize: 24, color: 'var(--gold)'}}>{team.score}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{display: 'flex', gap: 10}}>
+        <button className="btn btn-primary btn-full" onClick={onPlayAgain}>🔄 لعب مجدداً</button>
+        <button className="btn btn-secondary btn-full" onClick={onHome}>🏠 الرئيسية</button>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// لوحة التحكم
+// ============================================================
+function AdminScreen({ questionsDB, setQuestionsDB, modesDB, setModesDB, onBack, showToast }) {
+  const [tab, setTab] = useState('list');
+  const [selectedCat, setSelectedCat] = useState('cities');
+  const [search, setSearch] = useState('');
+  const [editingIdx, setEditingIdx] = useState(null);
+  const [editForm, setEditForm] = useState(null);
+  const [imageTarget, setImageTarget] = useState(null);
+
+  const filtered = useMemo(() => {
+    const list = questionsDB[selectedCat] || [];
+    if (!search) return list;
+    return list.filter(q =>
+      q.q?.includes(search) || q.a?.includes(search) ||
+      (q.wrong || []).some(w => w.includes(search))
+    );
+  }, [questionsDB, selectedCat, search]);
+
+  const saveCustom = useCallback((updated) => {
+    setQuestionsDB(updated);
+    try {
+      localStorage.setItem('esalni_v3_custom', JSON.stringify(updated));
+      showToast('تم الحفظ ✓');
+    } catch(e) { showToast('فشل الحفظ'); }
+  }, [setQuestionsDB, showToast]);
+
+  // رفع صورة لسؤال
+  const handleImageUpload = (e, target) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 500 * 1024) {
+      showToast('الصورة كبيرة جداً - الحد الأقصى 500KB');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const dataUrl = evt.target.result;
+      try {
+        if (target.type === 'mode-image') {
+          // صورة لفقرة الصور
+          const stored = JSON.parse(localStorage.getItem('esalni_v3_mode_images') || '{}');
+          stored[`images_${target.idx}`] = dataUrl;
+          localStorage.setItem('esalni_v3_mode_images', JSON.stringify(stored));
+          // تحديث modesDB
+          const newModes = { ...modesDB };
+          newModes.images[target.idx].customImg = dataUrl;
+          setModesDB(newModes);
+        }
+        showToast('تم رفع الصورة ✓');
+        setImageTarget(null);
+      } catch(e) {
+        showToast('فشل الحفظ - قد تكون localStorage ممتلئ');
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const exportJSON = () => {
+    const data = { questions: questionsDB, modes: modesDB };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `esalni-v3-${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('تم التصدير ✓');
+  };
+
+  const handleDelete = (idx) => {
+    if (!confirm('حذف هذا السؤال نهائياً؟')) return;
+    const updated = { ...questionsDB };
+    updated[selectedCat] = updated[selectedCat].filter((_, i) => i !== idx);
+    saveCustom(updated);
+  };
+
+  const handleEdit = (idx, q) => {
+    setEditingIdx(idx);
+    setEditForm({
+      q: q.q, a: q.a,
+      wrong: [...(q.wrong || ['','',''])],
+      hint: q.hint || '',
+      pts: q.pts || 200
+    });
+  };
+
+  const handleSaveEdit = () => {
+    if (!editForm.q.trim() || !editForm.a.trim()) {
+      showToast('السؤال والإجابة مطلوبان');
+      return;
+    }
+    const updated = { ...questionsDB };
+    if (editingIdx === 'new') {
+      updated[selectedCat] = [...(updated[selectedCat]||[]), { ...editForm }];
+    } else {
+      updated[selectedCat] = updated[selectedCat].map((q, i) => i === editingIdx ? { ...editForm } : q);
+    }
+    saveCustom(updated);
+    setEditingIdx(null); setEditForm(null);
+  };
+
+  return (
+    <div className="screen">
+      <button className="btn btn-ghost btn-sm" onClick={onBack}>‹ رجوع</button>
+      <h2 className="header-title" style={{fontSize: 28, margin: '12px 0'}}>إدارة المحتوى</h2>
+
+      <div className="warning-banner">
+        <span>⚠️</span>
+        <div>راجع المحتوى قبل النشر. التعديلات تُحفظ محلياً.</div>
+      </div>
+
+      <div className="admin-tabs">
+        <button className={`admin-tab ${tab === 'list' ? 'active' : ''}`} onClick={() => setTab('list')}>📋 الأسئلة</button>
+        <button className={`admin-tab ${tab === 'images' ? 'active' : ''}`} onClick={() => setTab('images')}>🖼️ الصور</button>
+        <button className={`admin-tab ${tab === 'tools' ? 'active' : ''}`} onClick={() => setTab('tools')}>🛠️ أدوات</button>
+        <button className={`admin-tab ${tab === 'stats' ? 'active' : ''}`} onClick={() => setTab('stats')}>📊 إحصائيات</button>
+      </div>
+
+      {tab === 'list' && (
+        <div>
+          <select value={selectedCat} onChange={(e) => setSelectedCat(e.target.value)} style={{marginBottom: 12}}>
+            {CATEGORIES.map(c => (
+              <option key={c.id} value={c.id}>{c.icon} {c.name} ({(questionsDB[c.id]||[]).length})</option>
+            ))}
+          </select>
+
+          <input type="text" placeholder="🔍 بحث..." value={search}
+            onChange={(e) => setSearch(e.target.value)} style={{marginBottom: 12}}/>
+
+          <button className="btn btn-primary btn-full" onClick={() => {
+            setEditingIdx('new');
+            setEditForm({ q: '', a: '', wrong: ['','',''], hint: '', pts: 200 });
+          }} style={{marginBottom: 16}}>+ إضافة سؤال جديد</button>
+
+          <div style={{fontSize: 13, color: 'var(--text-dim)', marginBottom: 8}}>
+            عرض {Math.min(filtered.length, 30)} من {(questionsDB[selectedCat]||[]).length} سؤال
+          </div>
+
+          {filtered.slice(0, 30).map((q, idx) => {
+            const realIdx = (questionsDB[selectedCat]||[]).indexOf(q);
+            const ptsClass = q.pts === 100 ? 'easy' : q.pts === 400 ? 'hard' : 'mid';
+            return (
+              <div key={idx} className="question-row">
+                <div className="question-row-header">
+                  <span className={`badge badge-${ptsClass}`}>{q.pts || 200} نقطة</span>
+                  <div style={{display: 'flex', gap: 6}}>
+                    <button className="btn btn-sm btn-secondary" onClick={() => handleEdit(realIdx, q)}>✏️</button>
+                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(realIdx)}>🗑️</button>
+                  </div>
+                </div>
+                <div className="question-row-text">{q.q}</div>
+                <div className="question-row-answer">✓ {q.a}</div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {tab === 'images' && (
+        <div>
+          <div className="warning-banner" style={{background: 'rgba(45,212,191,0.1)', borderColor: 'var(--teal)', color: 'var(--teal)'}}>
+            <span>💡</span>
+            <div>ارفع صورك الخاصة لفقرة "خمّن من الصورة". الحد الأقصى 500KB لكل صورة.</div>
+          </div>
+
+          <h3 style={{margin: '16px 0 12px', fontSize: 18}}>صور فقرة "خمّن من الصورة"</h3>
+
+          {(modesDB.images || []).map((item, idx) => (
+            <div key={idx} className="card" style={{marginBottom: 10, padding: 12}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
+                <div style={{
+                  width: 60, height: 60, borderRadius: 10,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 36, background: 'var(--bg-card)', overflow: 'hidden'
+                }}>
+                  {item.customImg ? <img src={item.customImg} alt="" style={{width: '100%', height: '100%', objectFit: 'cover'}}/> : item.img}
+                </div>
+                <div style={{flex: 1, fontSize: 13}}>
+                  <div style={{fontWeight: 700}}>{item.answer}</div>
+                  <div style={{color: 'var(--text-dim)', fontSize: 11}}>{item.desc}</div>
+                </div>
+                <label className="btn btn-sm btn-secondary" style={{cursor: 'pointer'}}>
+                  📷
+                  <input type="file" accept="image/*" style={{display: 'none'}}
+                    onChange={(e) => handleImageUpload(e, { type: 'mode-image', idx })}/>
+                </label>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {tab === 'tools' && (
+        <div>
+          <div className="card" style={{marginBottom: 12}}>
+            <h3 style={{fontSize: 16, marginBottom: 10}}>📤 التصدير</h3>
+            <button className="btn btn-secondary btn-full" onClick={exportJSON}>
+              تصدير كل المحتوى كـ JSON
+            </button>
+          </div>
+
+          <div className="card" style={{marginBottom: 12}}>
+            <h3 style={{fontSize: 16, marginBottom: 10}}>🔄 إعادة الضبط</h3>
+            <button className="btn btn-danger btn-full" onClick={() => {
+              if (confirm('حذف كل التعديلات والصور المرفوعة؟')) {
+                localStorage.removeItem('esalni_v3_custom');
+                localStorage.removeItem('esalni_v3_images');
+                localStorage.removeItem('esalni_v3_mode_images');
+                location.reload();
+              }
+            }}>إعادة ضبط كل شيء</button>
+          </div>
+        </div>
+      )}
+
+      {tab === 'stats' && (
+        <div>
+          <div className="card" style={{textAlign: 'center', marginBottom: 12}}>
+            <div style={{fontFamily: 'Rakkas, serif', fontSize: 48, color: 'var(--gold)'}}>
+              {Object.values(questionsDB).reduce((s, arr) => s + arr.length, 0)}
+            </div>
+            <div style={{color: 'var(--text-dim)'}}>إجمالي الأسئلة</div>
+          </div>
+
+          {CATEGORIES.map(cat => {
+            const list = questionsDB[cat.id] || [];
+            const easy = list.filter(q => q.pts === 100).length;
+            const mid = list.filter(q => q.pts === 200 || !q.pts).length;
+            const hard = list.filter(q => q.pts === 400).length;
+            return (
+              <div key={cat.id} className="card" style={{marginBottom: 8, padding: 12}}>
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6}}>
+                  <div style={{fontWeight: 700}}>{cat.icon} {cat.name}</div>
+                  <div style={{color: 'var(--gold)', fontFamily: 'Rakkas, serif', fontSize: 20}}>{list.length}</div>
+                </div>
+                <div style={{display: 'flex', gap: 8, fontSize: 12}}>
+                  <span style={{color: 'var(--pts-easy)'}}>100: {easy}</span>
+                  <span style={{color: 'var(--pts-mid)'}}>200: {mid}</span>
+                  <span style={{color: 'var(--pts-hard)'}}>400: {hard}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {editingIdx !== null && editForm && (
+        <div className="modal-overlay" onClick={() => { setEditingIdx(null); setEditForm(null); }}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3 className="modal-title">{editingIdx === 'new' ? 'سؤال جديد' : 'تعديل السؤال'}</h3>
+
+            <label>السؤال</label>
+            <textarea value={editForm.q} onChange={(e) => setEditForm({...editForm, q: e.target.value})} rows="3"/>
+
+            <label style={{marginTop: 12}}>الإجابة الصحيحة</label>
+            <input value={editForm.a} onChange={(e) => setEditForm({...editForm, a: e.target.value})}/>
+
+            <label style={{marginTop: 12}}>إجابات خاطئة (3)</label>
+            {[0,1,2].map(i => (
+              <input key={i} value={editForm.wrong[i] || ''}
+                onChange={(e) => {
+                  const newWrong = [...editForm.wrong];
+                  newWrong[i] = e.target.value;
+                  setEditForm({...editForm, wrong: newWrong});
+                }}
+                placeholder={`خاطئة ${i+1}`} style={{marginBottom: 6}}/>
+            ))}
+
+            <label style={{marginTop: 12}}>التلميح (اختياري)</label>
+            <input value={editForm.hint} onChange={(e) => setEditForm({...editForm, hint: e.target.value})}/>
+
+            <label style={{marginTop: 12}}>النقاط</label>
+            <select value={editForm.pts} onChange={(e) => setEditForm({...editForm, pts: parseInt(e.target.value)})}>
+              <option value="100">100 (سهل)</option>
+              <option value="200">200 (متوسط)</option>
+              <option value="400">400 (صعب)</option>
+            </select>
+
+            <div style={{display: 'flex', gap: 10, marginTop: 20}}>
+              <button className="btn btn-primary btn-full" onClick={handleSaveEdit}>
+                {editingIdx === 'new' ? '➕ إضافة' : '💾 حفظ'}
+              </button>
+              <button className="btn btn-ghost btn-full" onClick={() => { setEditingIdx(null); setEditForm(null); }}>
+                إلغاء
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============================================================
+// شاشة الحول
+// ============================================================
+function AboutScreen({ onBack, totalQuestions }) {
+  return (
+    <div className="screen">
+      <button className="btn btn-ghost btn-sm" onClick={onBack}>‹ رجوع</button>
+      <div style={{textAlign: 'center', padding: '20px 0'}}>
+        <div style={{fontSize: 64, marginBottom: 10}}>🎯</div>
+        <h1 className="header-title" style={{fontSize: 32}}>إسألني وبجاوبك</h1>
+        <p style={{color: 'var(--text-dim)'}}>الإصدار 3.0</p>
+      </div>
+
+      <div className="card" style={{marginBottom: 12}}>
+        <h3 style={{fontSize: 18, marginBottom: 10, color: 'var(--gold)'}}>📖 كيف تلعب؟</h3>
+        <ol style={{paddingRight: 20, lineHeight: 2, fontSize: 14}}>
+          <li>جهّز الفرق (2 إلى 6) واختر الفئات</li>
+          <li>في دورك، اختر نوع التحدي:
+            <div style={{fontSize: 12, color: 'var(--text-dim)', marginTop: 4}}>
+              سؤال عادي • تمثيل • صورة • من أنا • سباق • فيلم • رهان
+            </div>
+          </li>
+          <li>للسؤال العادي: اختر الصعوبة <strong>قبل</strong> ما تشوف السؤال!</li>
+          <li>100 سهل • 200 متوسط • 400 صعب</li>
+        </ol>
+      </div>
+
+      <div className="card" style={{marginBottom: 12}}>
+        <h3 style={{fontSize: 18, marginBottom: 10, color: 'var(--gold)'}}>🎮 الفقرات الـ 6</h3>
+        <div style={{fontSize: 13, lineHeight: 2}}>
+          🎭 <strong>تمثيل:</strong> مثّل الكلمة لفريقك (300 نقطة، 60 ث)<br/>
+          🖼️ <strong>صورة:</strong> خمّن من الصورة (200 نقطة)<br/>
+          🗣️ <strong>من أنا:</strong> 3 تلميحات بنقاط متناقصة (400/200/100)<br/>
+          ⏱️ <strong>سباق:</strong> أكبر عدد إجابات في 60 ث (50 لكل واحدة)<br/>
+          🎬 <strong>خمّن الفيلم:</strong> من الوصف (200 نقطة)<br/>
+          🎲 <strong>الرهان:</strong> ضاعِف نقاطك أو اخسرها!
+        </div>
+      </div>
+
+      <div className="warning-banner">
+        <span>⚠️</span>
+        <div>راجع المحتوى قبل النشر التجاري. الصور placeholder ويمكن استبدالها من لوحة التحكم.</div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+</body>
+</html>
