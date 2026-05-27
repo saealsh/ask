@@ -1,0 +1,13 @@
+{
+  "name": "إسألني وبجاوبك",
+  "short_name": "إسألني",
+  "description": "لعبة الأسئلة والفقرات التفاعلية للجلسات والدواوين",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a1020",
+  "theme_color": "#e8b86b",
+  "lang": "ar",
+  "dir": "rtl",
+  "categories": ["games", "entertainment"]
+}
