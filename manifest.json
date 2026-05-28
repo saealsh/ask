@@ -1,0 +1,12 @@
+{
+  "name": "36 — لعبة المسابقات",
+  "short_name": "36",
+  "description": "شبكة 6×6 - لعبة المسابقات الجماعية",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#1a0033",
+  "theme_color": "#cd7f32",
+  "lang": "ar",
+  "dir": "rtl"
+}
