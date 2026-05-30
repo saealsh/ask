@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>36 — نموذج التصميم الجديد</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Baloo+Bhaijaan+2:wght@500;600;700;800&family=Inter:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* ===== لوحة Arena الجديدة - نحاسي ذهبي على فحمي عميق ===== */
+  --bronze:#e0954a; --bronze-light:#f6b46a; --bronze-deep:#a4631f;
+  --gold:#f2c879; --burnt:#e2641c; --burnt-light:#f57a2c;
+  --bg-abyss:#070509; --bg-deep:#0d0a12; --bg-royal:#15101c;
+  --surface:rgba(246,180,106,.055); --surface-2:rgba(246,180,106,.1);
+  --glass:rgba(18,13,24,.78);
+  --border:rgba(224,149,74,.26); --border-strong:rgba(246,180,106,.55);
+  --glow:rgba(224,149,74,.4);
+  --text:#fdf3e6; --text-warm:#f5dcb0; --text-dim:#cdac82; --text-mute:#9a8262;
+  --success:#42e08a; --danger:#fb7185; --warn:#fbbf24; --info:#5eb3f0;
+  --r-lg:22px; --r-md:16px; --r-sm:11px;
+  --shadow:0 18px 50px -18px rgba(0,0,0,.75);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:'IBM Plex Sans Arabic',sans-serif;
+  background:radial-gradient(1200px 800px at 80% -10%,#1a1322,transparent 60%),
+             radial-gradient(900px 700px at -10% 110%,#15101c,transparent 55%),
+             var(--bg-abyss);
+  color:var(--text); min-height:100vh; padding:28px 16px 60px;
+  display:flex; flex-direction:column; align-items:center; gap:26px;
+}
+.disp{font-family:'Baloo Bhaijaan 2',cursive}
+.num{font-family:'Inter',sans-serif;font-weight:800}
+
+/* ===== رأس الصفحة ===== */
+.page-head{text-align:center;max-width:760px}
+.page-head .kicker{color:var(--bronze-light);font-weight:700;letter-spacing:1px;font-size:13px;text-transform:uppercase;opacity:.9}
+.page-head h1{font-size:34px;margin:6px 0;background:linear-gradient(120deg,var(--gold),var(--burnt-light));-webkit-background-clip:text;background-clip:text;color:transparent}
+.page-head p{color:var(--text-dim);font-size:15px;line-height:1.9}
+
+/* ===== شريط التنقّل بين الشاشات ===== */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:760px}
+.tab{
+  background:var(--surface);border:1px solid var(--border);color:var(--text-dim);
+  padding:9px 16px;border-radius:999px;font-family:inherit;font-size:14px;font-weight:600;
+  cursor:pointer;transition:.25s var(--ease)
+}
+.tab:hover{border-color:var(--border-strong);color:var(--text)}
+.tab.active{background:linear-gradient(120deg,var(--bronze),var(--burnt));color:#1a0f06;border-color:transparent;box-shadow:0 8px 22px -8px var(--glow)}
+
+/* ===== إطار الهاتف ===== */
+.stage{display:flex;flex-wrap:wrap;gap:34px;justify-content:center;align-items:flex-start}
+.phone{
+  width:390px;max-width:94vw;height:780px;border-radius:46px;
+  background:linear-gradient(160deg,#241a30,#0c0810);
+  padding:13px;box-shadow:var(--shadow),0 0 0 2px rgba(246,180,106,.12);
+  position:relative;flex-shrink:0
+}
+.phone::before{content:"";position:absolute;top:20px;left:50%;transform:translateX(-50%);width:120px;height:26px;background:#05030a;border-radius:0 0 16px 16px;z-index:30}
+.viewport{
+  width:100%;height:100%;border-radius:34px;overflow:hidden;position:relative;
+  background:var(--bg-deep);
+}
+.scroll{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding:46px 18px 86px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.scroll::-webkit-scrollbar{width:5px}
+.scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:9px}
+
+.screen{display:none;animation:fade .4s var(--ease)}
+.screen.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
+
+/* ===== مكوّنات عامة ===== */
+.brand-logo{width:64px;height:64px;border-radius:18px;margin:0 auto;display:grid;place-items:center;
+  background:linear-gradient(150deg,var(--bronze-light),var(--burnt));box-shadow:0 12px 30px -10px var(--glow)}
+.brand-logo .num{font-size:30px;color:#1a0f06}
+.brand-name{font-size:42px;line-height:1;margin-top:10px;text-align:center;
+  background:linear-gradient(120deg,var(--gold),var(--burnt-light));-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand-sub{text-align:center;color:var(--text-warm);font-weight:700;font-size:19px;margin-top:2px}
+.brand-tag{text-align:center;color:var(--text-mute);font-size:13px;margin-top:4px}
+.hero-badge{margin:14px auto 0;width:max-content;background:var(--surface-2);border:1px solid var(--border);
+  padding:7px 16px;border-radius:999px;font-size:13px;color:var(--text-warm);font-weight:600}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:16px;backdrop-filter:blur(8px)}
+.btn{font-family:inherit;font-weight:700;border:0;border-radius:var(--r-sm);cursor:pointer;font-size:15px;padding:13px 18px;transition:.2s var(--ease)}
+.btn-primary{background:linear-gradient(120deg,var(--bronze),var(--burnt));color:#1a0f06;box-shadow:0 10px 26px -10px var(--glow);width:100%}
+.btn-primary:active{transform:scale(.97)}
+.btn-ghost{background:var(--surface);border:1px solid var(--border);color:var(--text-dim)}
+.section-title{font-size:13px;color:var(--text-mute);font-weight:700;margin:20px 4px 10px;letter-spacing:.5px}
+
+/* ===== HUB ===== */
+.hub-card{display:flex;align-items:center;gap:14px;padding:16px;border-radius:var(--r-md);margin-bottom:12px;
+  background:var(--surface);border:1px solid var(--border);cursor:pointer;position:relative;overflow:hidden;transition:.25s var(--ease)}
+.hub-card:hover{transform:translateY(-3px);border-color:var(--border-strong);background:var(--surface-2)}
+.hub-card .ic{width:54px;height:54px;border-radius:15px;flex-shrink:0;display:grid;place-items:center;color:#fff}
+.hub-card .t{font-weight:700;font-size:18px}
+.hub-card .d{font-size:12.5px;color:var(--text-dim);margin-top:3px;line-height:1.6}
+.hub-card .arrow{margin-inline-start:auto;color:var(--text-mute);font-size:24px}
+
+/* ===== بطاقات الرئيسية ===== */
+.xp-card{display:flex;align-items:center;gap:12px;padding:14px;border-radius:var(--r-md);margin-bottom:12px;cursor:pointer;
+  background:linear-gradient(120deg,rgba(224,149,74,.12),rgba(226,100,28,.06));border:1px solid var(--border)}
+.xp-icon{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:24px;background:var(--surface-2);border:1px solid var(--border)}
+.xp-bar{height:7px;border-radius:9px;background:rgba(0,0,0,.4);margin-top:8px;overflow:hidden}
+.xp-bar>i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--gold),var(--bronze-light))}
+.primary-cta{display:flex;align-items:center;gap:14px;padding:18px;border-radius:var(--r-md);cursor:pointer;
+  background:linear-gradient(125deg,var(--bronze),var(--burnt));color:#1a0f06;box-shadow:0 14px 32px -12px var(--glow)}
+.primary-cta .ic{width:50px;height:50px;border-radius:14px;background:rgba(255,255,255,.22);display:grid;place-items:center}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:11px}
+.tile{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:16px;text-align:center;cursor:pointer;transition:.2s var(--ease)}
+.tile:hover{transform:translateY(-3px);border-color:var(--border-strong)}
+.tile .ic{color:var(--bronze-light);margin-bottom:8px;display:flex;justify-content:center}
+.tile .t{font-weight:700;font-size:15px}
+.tile .d{font-size:11.5px;color:var(--text-mute);margin-top:3px}
+
+/* ===== SETUP ===== */
+.top-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.top-head h2{font-size:20px}
+.team-row{display:flex;align-items:center;gap:10px;padding:12px;border-radius:var(--r-sm);background:var(--surface);border:1px solid var(--border);margin-bottom:10px}
+.team-av{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-size:24px;flex-shrink:0}
+.team-row input{flex:1;background:var(--bg-deep);border:1px solid var(--border);border-radius:9px;color:var(--text);
+  font-family:inherit;font-size:15px;padding:10px 12px}
+.team-row input:focus{outline:0;border-color:var(--border-strong)}
+.swatches{display:flex;gap:6px}
+.sw{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent}
+.sw.on{border-color:#fff;transform:scale(1.15)}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+.cat-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:12px 6px;text-align:center;cursor:pointer;position:relative;transition:.2s var(--ease)}
+.cat-card:hover{border-color:var(--border-strong)}
+.cat-card.sel{border-color:var(--cat);background:color-mix(in srgb,var(--cat) 14%,transparent);box-shadow:0 0 0 1px var(--cat) inset}
+.cat-card .em{font-size:26px}
+.cat-card .nm{font-size:12px;font-weight:600;margin-top:5px}
+.cat-card .ct{font-size:10px;color:var(--text-mute);margin-top:2px}
+.cat-card .chk{position:absolute;top:6px;inset-inline-start:6px;width:18px;height:18px;border-radius:50%;background:var(--cat);color:#fff;display:none;place-items:center;font-size:11px}
+.cat-card.sel .chk{display:grid}
+.cnt-pill{background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:4px 12px;font-size:12px;color:var(--text-warm);font-weight:600}
+
+/* ===== GRID 6×6 ===== */
+.game-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.icon-btn{width:42px;height:42px;border-radius:13px;background:var(--surface);border:1px solid var(--border);color:var(--text-dim);display:grid;place-items:center;cursor:pointer}
+.round-pill{background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:7px 16px;font-size:13px;font-weight:600;color:var(--text-warm)}
+.turn-banner{text-align:center;font-weight:700;font-size:17px;margin:4px 0 12px}
+.turn-banner b{color:var(--bronze-light)}
+.prog{height:8px;border-radius:9px;background:rgba(0,0,0,.4);overflow:hidden;margin-bottom:4px}
+.prog>i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--burnt))}
+.prog-lbl{text-align:center;font-size:11px;color:var(--text-mute);margin-bottom:14px}
+.grid66{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.gh{text-align:center;font-size:10px;font-weight:700;padding-bottom:6px;line-height:1.3}
+.gh .ge{font-size:18px;display:block}
+.cell{aspect-ratio:1;border-radius:10px;display:grid;place-items:center;font-family:'Inter';font-weight:800;font-size:15px;cursor:pointer;
+  border:1px solid var(--border);transition:.18s var(--ease)}
+.cell:hover{transform:scale(1.06);z-index:2}
+.cell.easy{background:rgba(66,224,138,.1);color:#7ef0ad;border-color:rgba(66,224,138,.28)}
+.cell.med{background:rgba(251,191,36,.1);color:#fcd34d;border-color:rgba(251,191,36,.28)}
+.cell.hard{background:rgba(251,113,133,.1);color:#fda4af;border-color:rgba(251,113,133,.28)}
+.cell.used{background:rgba(255,255,255,.02);color:var(--text-mute);cursor:default;opacity:.45}
+.cell.used:hover{transform:none}
+
+/* ===== PLAY ===== */
+.timer-bar{margin-bottom:14px}
+.timer-track{height:9px;border-radius:9px;background:rgba(0,0,0,.45);overflow:hidden}
+.timer-fill{height:100%;border-radius:9px;background:linear-gradient(90deg,var(--success),var(--gold));transition:width 1s linear}
+.timer-fill.warn{background:linear-gradient(90deg,var(--warn),var(--burnt))}
+.timer-num{text-align:center;font-family:'Inter';font-weight:800;font-size:13px;color:var(--text-warm);margin-top:5px}
+.play-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.badge{background:linear-gradient(120deg,var(--bronze),var(--burnt));color:#1a0f06;font-weight:800;padding:6px 14px;border-radius:999px;font-size:13px}
+.play-cat{display:flex;align-items:center;gap:7px;font-weight:700;font-size:14px}
+.teams-row{display:flex;gap:8px;margin-bottom:16px}
+.tchip{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:9px;text-align:center}
+.tchip.active{border-color:var(--bronze-light);background:var(--surface-2);box-shadow:0 0 0 1px var(--bronze-light) inset}
+.tchip .av{font-size:20px}
+.tchip .nm{font-size:11px;color:var(--text-dim);margin-top:2px}
+.tchip .sc{font-family:'Inter';font-weight:800;font-size:17px;margin-top:1px}
+.q-card{background:linear-gradient(150deg,var(--surface-2),var(--surface));border:1px solid var(--border-strong);
+  border-radius:var(--r-lg);padding:26px 18px;text-align:center;margin-bottom:16px;min-height:120px;display:grid;place-items:center}
+.q-card .q{font-size:21px;font-weight:700;line-height:1.7}
+.answers{display:flex;flex-direction:column;gap:10px}
+.ans{display:flex;align-items:center;gap:12px;padding:14px;border-radius:var(--r-sm);background:var(--surface);border:1.5px solid var(--border);
+  cursor:pointer;font-family:inherit;font-size:15.5px;color:var(--text);text-align:start;transition:.2s var(--ease)}
+.ans:hover{border-color:var(--border-strong);background:var(--surface-2)}
+.ans .lt{width:30px;height:30px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;font-weight:700;flex-shrink:0;color:var(--bronze-light)}
+.ans.correct{border-color:var(--success);background:rgba(66,224,138,.14)}
+.ans.correct .lt{background:var(--success);color:#06281a}
+.ans.wrong{border-color:var(--danger);background:rgba(251,113,133,.12)}
+.ans.wrong .lt{background:var(--danger);color:#2a0810}
+.lifelines{display:flex;gap:8px;margin-top:16px}
+.ll{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:11px 6px;text-align:center;cursor:pointer;transition:.2s var(--ease)}
+.ll:hover{border-color:var(--border-strong)}
+.ll .lic{font-size:19px}
+.ll .lt{font-size:10.5px;color:var(--text-dim);margin-top:3px}
+
+/* ===== SUMMARY ===== */
+.trophy{font-size:60px;text-align:center;margin:10px 0;animation:pop .6s var(--ease)}
+.win-name{text-align:center;font-size:26px;font-weight:800;background:linear-gradient(120deg,var(--gold),var(--burnt-light));-webkit-background-clip:text;background-clip:text;color:transparent}
+.win-sub{text-align:center;color:var(--text-dim);font-size:14px;margin-top:2px}
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin:24px 0}
+.pod{border-radius:14px 14px 0 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:12px 8px;width:84px;
+  background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--border);border-bottom:0}
+.pod .av{font-size:26px;margin-bottom:4px}
+.pod .nm{font-size:12px;font-weight:600}
+.pod .sc{font-family:'Inter';font-weight:800;font-size:18px;color:var(--bronze-light)}
+.pod .rk{font-family:'Inter';font-weight:900;font-size:13px;color:var(--text-mute);margin-top:4px}
+.pod.p1{height:160px;border-color:var(--border-strong);box-shadow:0 -10px 30px -14px var(--glow)}
+.pod.p2{height:128px}.pod.p3{height:104px}
+.xp-earned{text-align:center;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-md);padding:14px;margin:18px 0}
+.xp-earned .v{font-family:'Inter';font-weight:800;font-size:24px;color:var(--success)}
+.sum-actions{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+
+/* ===== bottom nav ===== */
+.bnav{position:absolute;bottom:0;left:0;right:0;height:68px;background:var(--glass);backdrop-filter:blur(14px);
+  border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;z-index:20}
+.bnav a{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text-mute);font-size:10px;cursor:pointer}
+.bnav a.on{color:var(--bronze-light)}
+.bnav a svg{width:21px;height:21px}
+
+/* ===== لوحة ملاحظات جانبية ===== */
+.notes{max-width:380px;width:100%}
+.notes h3{font-size:16px;margin-bottom:12px;color:var(--text-warm)}
+.note{background:var(--surface);border:1px solid var(--border);border-inline-start:3px solid var(--bronze);
+  border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:13.5px;line-height:1.8;color:var(--text-dim)}
+.note b{color:var(--text-warm)}
+.note.fix{border-inline-start-color:var(--success)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;font-size:12px;color:var(--text-mute);margin-top:4px}
+.legend span{display:flex;align-items:center;gap:6px}
+.dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+@media(max-width:520px){.phone{height:720px}}
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <div class="kicker">UI / UX Redesign Concept</div>
+  <h1 class="disp">36 — سؤال المجلس</h1>
+  <p>نموذج تصميم جديد لواجهة اللعبة. نظام «Arena» نحاسي على فحمي عميق، مع تراتب بصري أوضح،
+     مساحات تنفّس أكبر، وأهداف لمس مريحة. تنقّل بين الشاشات من الأزرار بالأسفل.</p>
+</div>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="stage">
+  <div class="phone">
+    <div class="viewport">
+      <div class="scroll" id="scroll">
+
+      <!-- ============ HUB ============ -->
+      <section class="screen on" data-s="hub">
+        <div class="brand-logo"><span class="num">36</span></div>
+        <div class="brand-sub">سؤال المجلس</div>
+        <div class="brand-tag">اختر لعبتك</div>
+        <div class="section-title">الألعاب</div>
+        <div class="hub-card" onclick="go('home')">
+          <div class="ic" style="background:linear-gradient(135deg,var(--bronze-light),var(--burnt))">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          </div>
+          <div><div class="t">سؤال المجلس</div><div class="d">شبكة 6×6 • فرق تتنافس • +1500 سؤال في 16 فئة</div></div>
+          <div class="arrow">‹</div>
+        </div>
+        <div class="hub-card" onclick="go('home')">
+          <div class="ic" style="background:linear-gradient(135deg,#a855f7,#7c3aed)">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/></svg>
+          </div>
+          <div><div class="t">الجاسوس</div><div class="d">اكشفوا الجاسوس برّا السالفة • 3-8 لاعبين • 120 سالفة</div></div>
+          <div class="arrow">‹</div>
+        </div>
+        <div class="hub-card" onclick="go('home')">
+          <div class="ic" style="background:linear-gradient(135deg,#22c55e,#15803d)">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#fff" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div><div class="t">من الأكثر؟</div><div class="d">صوّتوا على الأنسب • أسئلة طريفة • 3-10 لاعبين</div></div>
+          <div class="arrow">‹</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:18px">
+          <button class="btn btn-ghost" style="flex:1" onclick="go('summary')">كيف نلعب</button>
+          <button class="btn btn-ghost" style="flex:1">ملفي الشخصي</button>
+        </div>
+      </section>
+
+      <!-- ============ HOME ============ -->
+      <section class="screen" data-s="home">
+        <div class="brand-logo"><span class="num">36</span></div>
+        <h1 class="brand-name disp" style="font-size:34px">36</h1>
+        <div class="brand-sub">سؤال المجلس</div>
+        <div class="hero-badge">١٥٤٠ سؤال • 16 فئة</div>
+
+        <div class="xp-card" style="margin-top:18px" onclick="go('summary')">
+          <div class="xp-icon">🦅</div>
+          <div style="flex:1">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div><div style="font-weight:700;color:var(--gold)">صقر المجلس</div><div class="num" style="font-size:14px;color:var(--text-warm)">٢٬٤٨٠ XP</div></div>
+              <div style="text-align:start;font-size:11px;color:var(--text-mute)">١٢ لعبة • ٨ فوز<br>🏅 ٦/٢٠</div>
+            </div>
+            <div class="xp-bar"><i style="width:64%"></i></div>
+          </div>
+          <div style="color:var(--text-mute);font-size:22px">‹</div>
+        </div>
+
+        <div class="primary-cta" onclick="go('grid')">
+          <div class="ic"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#1a0f06" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <div><div style="font-weight:800;font-size:18px">لعب سريع</div><div style="font-size:12.5px;opacity:.82">6 فئات عشوائية • فريقان • ابدأ فوراً</div></div>
+          <div style="margin-inline-start:auto;font-size:24px">‹</div>
+        </div>
+
+        <div class="tiles">
+          <div class="tile" onclick="go('setup')">
+            <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4M8 10v4M15 11h.01M18 13h.01"/></svg></div>
+            <div class="t">لعب مخصّص</div><div class="d">اختر 6 فئات</div>
+          </div>
+          <div class="tile" onclick="go('setup')">
+            <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <div class="t">الفرق</div><div class="d">٢ إلى ٦ فرق</div>
+          </div>
+          <div class="tile" onclick="go('summary')">
+            <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>
+            <div class="t">الإحصائيات</div><div class="d">تقدّمك</div>
+          </div>
+          <div class="tile">
+            <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+            <div class="t">كيف نلعب</div><div class="d">الشرح</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SETUP ============ -->
+      <section class="screen" data-s="setup">
+        <div class="top-head">
+          <button class="btn btn-ghost" style="padding:8px 12px" onclick="go('home')">رجوع ›</button>
+          <h2 class="disp">إعداد اللعبة</h2>
+          <div style="width:46px"></div>
+        </div>
+
+        <div class="section-title">الفرق</div>
+        <div class="team-row">
+          <div class="team-av" style="background:rgba(91,179,240,.18)">🦅</div>
+          <input value="فريق الصقور">
+          <div class="swatches"><i class="sw on" style="background:#5eb3f0"></i><i class="sw" style="background:#fb7185"></i><i class="sw" style="background:#42e08a"></i></div>
+        </div>
+        <div class="team-row">
+          <div class="team-av" style="background:rgba(251,113,133,.18)">🐺</div>
+          <input value="فريق الذئاب">
+          <div class="swatches"><i class="sw" style="background:#5eb3f0"></i><i class="sw on" style="background:#fb7185"></i><i class="sw" style="background:#42e08a"></i></div>
+        </div>
+        <button class="btn btn-ghost" style="width:100%;margin-top:2px">+ إضافة فريق</button>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:22px">
+          <div class="section-title" style="margin:0">اختر ٦ فئات</div>
+          <div class="cnt-pill" id="catcount">٣ / ٦</div>
+        </div>
+        <div class="cat-grid" id="catgrid"></div>
+
+        <button class="btn btn-primary" style="margin-top:20px" onclick="go('grid')">ابدأ اللعبة ⚔️</button>
+      </section>
+
+      <!-- ============ GRID 6×6 ============ -->
+      <section class="screen" data-s="grid">
+        <div class="game-bar">
+          <div class="icon-btn" onclick="go('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></div>
+          <div class="round-pill">باقي ٢٤ سؤال</div>
+          <div style="width:42px"></div>
+        </div>
+        <div class="turn-banner">دور <b>🦅 فريق الصقور</b></div>
+        <div class="prog"><i style="width:33%"></i></div>
+        <div class="prog-lbl">١٢ / ٣٦ سؤال</div>
+
+        <div class="grid66" id="grid66"></div>
+        <p style="text-align:center;font-size:11.5px;color:var(--text-mute);margin-top:14px">اختر خانة لعرض السؤال — الأخضر أسهل، الأحمر أصعب وأعلى نقاطاً</p>
+      </section>
+
+      <!-- ============ PLAY ============ -->
+      <section class="screen" data-s="play">
+        <div class="timer-bar"><div class="timer-track"><div class="timer-fill" style="width:62%"></div></div><div class="timer-num">⏱ ١٨ ثانية</div></div>
+        <div class="play-top">
+          <span class="badge">٣٠٠ نقطة</span>
+          <div class="play-cat"><span style="color:#3b82f6">🌆</span> مدن وعواصم</div>
+        </div>
+        <div class="teams-row">
+          <div class="tchip active"><div class="av">🦅</div><div class="nm">الصقور</div><div class="sc" style="color:#5eb3f0">٤٠٠</div></div>
+          <div class="tchip"><div class="av">🐺</div><div class="nm">الذئاب</div><div class="sc" style="color:#fb7185">٣٠٠</div></div>
+        </div>
+        <div class="q-card"><div class="q">ما هي عاصمة أستراليا؟</div></div>
+        <div class="answers">
+          <button class="ans correct"><span class="lt">✓</span><span>كانبيرا</span></button>
+          <button class="ans"><span class="lt">ب</span><span>سيدني</span></button>
+          <button class="ans wrong"><span class="lt">✗</span><span>ملبورن</span></button>
+          <button class="ans"><span class="lt">د</span><span>بيرث</span></button>
+        </div>
+        <div class="lifelines">
+          <div class="ll"><div class="lic">✂️</div><div class="lt">حذف إجابتين</div></div>
+          <div class="ll"><div class="lic">⏱️</div><div class="lt">وقت إضافي</div></div>
+          <div class="ll"><div class="lic">⚡</div><div class="lt">نقاط مضاعفة</div></div>
+          <div class="ll"><div class="lic">👥</div><div class="lt">رأي المجلس</div></div>
+        </div>
+      </section>
+
+      <!-- ============ SUMMARY ============ -->
+      <section class="screen" data-s="summary">
+        <div class="trophy">🏆</div>
+        <div class="win-name disp">فريق الصقور</div>
+        <div class="win-sub">الفائز بنتيجة ١٬٢٠٠ نقطة</div>
+        <div class="podium">
+          <div class="pod p2"><div class="av">🐺</div><div class="nm">الذئاب</div><div class="sc">٩٠٠</div><div class="rk">٢</div></div>
+          <div class="pod p1"><div class="av">🦅</div><div class="nm">الصقور</div><div class="sc">١٢٠٠</div><div class="rk">🥇</div></div>
+          <div class="pod p3"><div class="av">🦁</div><div class="nm">الأسود</div><div class="sc">٦٥٠</div><div class="rk">٣</div></div>
+        </div>
+        <div class="xp-earned"><div style="font-size:13px;color:var(--text-dim)">كسبت هذه الجولة</div><div class="v">+١٣٠ XP</div></div>
+        <div class="sum-actions">
+          <button class="btn btn-primary" onclick="go('setup')">لعبة جديدة 🔄</button>
+          <div style="display:flex;gap:10px">
+            <button class="btn btn-ghost" style="flex:1">مشاركة النتيجة</button>
+            <button class="btn btn-ghost" style="flex:1" onclick="go('hub')">الرئيسية</button>
+          </div>
+        </div>
+      </section>
+
+      </div><!-- /scroll -->
+
+      <!-- bottom nav -->
+      <nav class="bnav" id="bnav">
+        <a data-n="hub" onclick="go('hub')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>الرئيسية</a>
+        <a data-n="setup" onclick="go('setup')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4"/></svg>إعداد</a>
+        <a data-n="grid" onclick="go('grid')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>اللعب</a>
+        <a data-n="summary" onclick="go('summary')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>النتائج</a>
+      </nav>
+
+    </div><!-- /viewport -->
+  </div><!-- /phone -->
+
+  <!-- لوحة الملاحظات -->
+  <div class="notes">
+    <h3>أبرز ما عُولج في إعادة التصميم</h3>
+    <div class="note"><b>تراتب بصري أوضح:</b> عنوان واحد بارز لكل شاشة، ومساحات تنفّس أكبر بدل ازدحام البطاقات.</div>
+    <div class="note"><b>شبكة ٦×٦ مقروءة:</b> ترميز لوني للصعوبة (أخضر/أصفر/أحمر) + أيقونات فئات أوضح بدل قصّ الأسماء.</div>
+    <div class="note"><b>أهداف لمس مريحة:</b> أزرار ≥ ٤٤px، حقول إدخال أكبر، وإبدال قوائم الإيموجي الصغيرة.</div>
+    <div class="note"><b>مؤقّت واحد واضح:</b> شريط علوي يتغيّر لونه عند اقتراب الوقت بدل نظامين متداخلين.</div>
+    <div class="note"><b>شاشة نتائج محفّزة:</b> منصّة تتويج (podium) + XP بحركة، تعزّز الحماس والعودة للّعب.</div>
+    <div class="note fix"><b>توصية تقنية:</b> استبدال إعادة بناء <code>innerHTML</code> الكاملة بنظام تحديث جزئي (diff) لمنع الوميض وفقدان التركيز، وفصل CSS عن الـinline-styles، وإضافة <code>aria</code> وحالات تركيز للوحة المفاتيح.</div>
+    <div class="legend">
+      <span><i class="dot" style="background:#42e08a"></i>سهل</span>
+      <span><i class="dot" style="background:#fbbf24"></i>متوسط</span>
+      <span><i class="dot" style="background:#fb7185"></i>صعب</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const CATS=[
+ ['🌆','مدن وعواصم','#3b82f6',1],['🚩','أعلام','#ef4444',1],['🌍','جغرافيا','#10b981',1],
+ ['📜','التاريخ','#b45309',0],['⚽','الرياضة','#16a34a',0],['🎬','سينما','#ec4899',0],
+ ['🎵','الموسيقى','#8b5cf6',0],['💻','تقنية','#06b6d4',0],['🔬','العلوم','#6366f1',0],
+ ['🍽️','الطبخ','#f97316',0],['📚','الأدب','#d97706',0],['🦁','الحيوانات','#84cc16',0],
+ ['⭐','المشاهير','#eab308',0],['🇸🇦','السعودية','#059669',0],['🧩','ألغاز','#a855f7',0],['💡','ثقافة عامة','#14b8a6',0]
+];
+const counts=[210,180,165,140,150,120,90,110,130,80,70,95,100,160,75,170];
+let sel=new Set([0,1,2]);
+function buildCats(){
+  const g=document.getElementById('catgrid');
+  g.innerHTML=CATS.map((c,i)=>`<div class="cat-card ${sel.has(i)?'sel':''}" style="--cat:${c[2]}" onclick="toggleCat(${i})">
+    <div class="chk">✓</div><div class="em">${c[0]}</div><div class="nm">${c[1]}</div><div class="ct">${counts[i].toLocaleString('ar-EG')} سؤال</div></div>`).join('');
+  document.getElementById('catcount').textContent=sel.size.toLocaleString('ar-EG')+' / ٦';
+}
+function toggleCat(i){ if(sel.has(i))sel.delete(i); else if(sel.size<6)sel.add(i); buildCats(); }
+
+const COLS=[['🌆','مدن','#3b82f6'],['🚩','أعلام','#ef4444'],['🌍','جغرافيا','#10b981'],['⚽','رياضة','#16a34a'],['🎬','سينما','#ec4899'],['🔬','علوم','#6366f1']];
+const PTS=[100,200,300,400,500,600];
+const DIFF=['easy','easy','med','med','hard','hard'];
+function buildGrid(){
+  const g=document.getElementById('grid66');
+  let h=COLS.map(c=>`<div class="gh" style="color:${c[2]}"><span class="ge">${c[0]}</span>${c[1]}</div>`).join('');
+  for(let r=0;r<6;r++){ COLS.forEach((c,ci)=>{
+    const used=(r+ci)%5===0 && r<3;
+    h+=`<div class="cell ${DIFF[r]} ${used?'used':''}" onclick="${used?'':"go('play')"}">${used?'✓':PTS[r].toLocaleString('ar-EG')}</div>`;
+  });}
+  g.innerHTML=h;
+}
+
+function go(s){
+  document.querySelectorAll('.screen').forEach(e=>e.classList.toggle('on',e.dataset.s===s));
+  document.querySelectorAll('#tabs .tab').forEach(t=>t.classList.toggle('active',t.dataset.s===s));
+  document.querySelectorAll('#bnav a').forEach(a=>a.classList.toggle('on',a.dataset.n===s));
+  document.getElementById('scroll').scrollTop=0;
+}
+const TABS=[['hub','الرئيسية'],['home','القائمة'],['setup','الإعداد'],['grid','الشبكة ٦×٦'],['play','السؤال'],['summary','النتائج']];
+document.getElementById('tabs').innerHTML=TABS.map((t,i)=>`<button class="tab ${i===0?'active':''}" data-s="${t[0]}" onclick="go('${t[0]}')">${t[1]}</button>`).join('');
+buildCats(); buildGrid();
+</script>
+</body>
+</html>
